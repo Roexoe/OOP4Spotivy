@@ -1,4 +1,4 @@
-﻿namespace OOP4Spotivy
+﻿namespace OOP4Spotivy.NewFolder
 {
     internal class Program
     {
