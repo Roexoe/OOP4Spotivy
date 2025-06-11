@@ -15,7 +15,15 @@ public class Song : iPlayable
         SongGenre = genre;
     }
 
-    public void Play() { }
+    public void Play()
+    {
+        string artiesten = Artists != null && Artists.Count > 0
+            ? string.Join(", ", Artists.ConvertAll(a => a.Naam))
+            : "Onbekend";
+        Console.WriteLine($"Speelt nu af: '{Title}' - Artiest(en): {artiesten} - Genre: {SongGenre} - Duur: {Duur} seconden");
+    }
+
+
     public void Pause() { }
     public void Next() { }
     public void Stop() { }
