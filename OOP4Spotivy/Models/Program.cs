@@ -28,6 +28,7 @@ namespace OOP4Spotivy.NewFolder
             {
                 Console.WriteLine("1. Maak een nieuwe afspeellijst aan");
                 Console.WriteLine("2. Voeg een liedje toe aan een afspeellijst");
+                Console.WriteLine("3. Verwijder een liedje uit een afspeellijst");
                 Console.WriteLine("0. Afsluiten");
                 Console.Write("Kies een optie: ");
                 string keuze = Console.ReadLine();
@@ -40,7 +41,6 @@ namespace OOP4Spotivy.NewFolder
                 }
                 else if (keuze == "2")
                 {
-                    // Playlists van de gebruiker
                     var playlists = client.ActiveUser.Playlists;
                     if (playlists.Count == 0)
                     {
@@ -59,7 +59,6 @@ namespace OOP4Spotivy.NewFolder
                     }
                     var gekozenPlaylist = playlists[playlistIndex - 1];
 
-                    // Beschikbare liedjes
                     if (client.AllSongs.Count == 0)
                     {
                         Console.WriteLine("Er zijn geen liedjes beschikbaar.");
@@ -77,9 +76,51 @@ namespace OOP4Spotivy.NewFolder
                     }
                     var gekozenSong = client.AllSongs[songIndex - 1];
 
-                    // Liedje toevoegen aan lijst
                     gekozenPlaylist.Add(gekozenSong);
                     Console.WriteLine($"Liedje '{gekozenSong.Title}' toegevoegd aan afspeellijst '{gekozenPlaylist.Title}'.");
+                }
+                else if (keuze == "3")
+                {
+                    var playlists = client.ActiveUser.Playlists;
+                    if (playlists.Count == 0)
+                    {
+                        Console.WriteLine("Je hebt nog geen afspeellijsten.");
+                        continue;
+                    }
+                    Console.WriteLine("Kies een afspeellijst:");
+                    for (int i = 0; i < playlists.Count; i++)
+                    {
+                        Console.WriteLine($"{i + 1}. {playlists[i].Title}");
+                    }
+                    if (!int.TryParse(Console.ReadLine(), out int playlistIndex) || playlistIndex < 1 || playlistIndex > playlists.Count)
+                    {
+                        Console.WriteLine("Ongeldige keuze.");
+                        continue;
+                    }
+                    var gekozenPlaylist = playlists[playlistIndex - 1];
+
+                    var playables = gekozenPlaylist.ShowPlayables();
+                    if (playables.Count == 0)
+                    {
+                        Console.WriteLine("Deze afspeellijst bevat geen liedjes.");
+                        continue;
+                    }
+                    Console.WriteLine("Kies een liedje om te verwijderen:");
+                    for (int i = 0; i < playables.Count; i++)
+                    {
+                        if (playables[i] is Song song)
+                            Console.WriteLine($"{i + 1}. {song.Title}");
+                        else
+                            Console.WriteLine($"{i + 1}. [Niet een los liedje]");
+                    }
+                    if (!int.TryParse(Console.ReadLine(), out int songIndex) || songIndex < 1 || songIndex > playables.Count)
+                    {
+                        Console.WriteLine("Ongeldige keuze.");
+                        continue;
+                    }
+                    var teVerwijderen = playables[songIndex - 1];
+                    gekozenPlaylist.Remove(teVerwijderen);
+                    Console.WriteLine("Liedje verwijderd uit de afspeellijst.");
                 }
                 else if (keuze == "0")
                 {
