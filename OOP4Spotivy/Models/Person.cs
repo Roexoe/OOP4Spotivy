@@ -10,7 +10,7 @@ public class Person
     {
         Naam = naam;
         Friends = new List<Person>();
-        Playlists = new List<Playlist>();
+        Playlists = new List<Playlist>(); // <-- Voeg deze regel toe!
     }
 
     public List<Person> ShowFriends()

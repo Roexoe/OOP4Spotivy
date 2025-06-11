@@ -39,8 +39,10 @@ public class Client
     {
         if (ActiveUser != null)
         {
-            ActiveUser.CreatePlaylist(title);
+            // SuperUser heeft CreatePlayList met een hoofdletter 'L'
+            var playlist = ActiveUser.CreatePlaylist(title);
             Console.WriteLine($"Afspeellijst '{title}' aangemaakt.");
+
         }
     }
 

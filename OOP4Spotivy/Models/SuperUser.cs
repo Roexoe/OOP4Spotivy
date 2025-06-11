@@ -4,7 +4,11 @@ public class SuperUser : Person
 
     public void AddFriend(Person person) { }
     public void RemoveFriend(Person person) { }
-    public Playlist CreatePlayList(string title) { return null; }
+    public new Playlist CreatePlaylist(string title)
+    {
+        // Roep de CreatePlaylist methode van de basisklasse aan
+        return base.CreatePlaylist(title);
+    }
     public void RemovePlayList(int index) { }
     public void AddToPlayList(iPlayable playable) { }
     public void RemoveFromPlayList(iPlayable playable) { }
