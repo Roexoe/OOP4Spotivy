@@ -1,4 +1,6 @@
 public enum Genres
 {
-    // Moet nog 
+    Pop,
+    Rock
+    // nog meer genres hier
 }
