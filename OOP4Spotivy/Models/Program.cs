@@ -1,10 +1,10 @@
-﻿namespace OOP4Spotivy
+﻿namespace OOP4Spotivy.NewFolder
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Console.WriteLine("Helloee");
         }
     }
 }
