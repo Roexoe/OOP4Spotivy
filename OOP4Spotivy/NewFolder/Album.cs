@@ -3,16 +3,26 @@ using System.Collections.Generic;
 public class Album : SongCollection
 {
     public List<Artist> Artists { get; set; }
-    public List<Song> Songs { get; }
 
     public Album(List<Artist> artists, string title, List<Song> songs) : base(title)
     {
         Artists = artists;
-        Songs = songs;
+        if (songs != null)
+        {
+            foreach (var song in songs)
+            {
+                playables.Add(song);
+            }
+        }
     }
 
-    public List<Artist> ShowArtists() => Artists;
-    public List<Song> ShowSongs() => Songs;
+    public List<Artist> ShowArtists()
+    {
+        return Artists;
+    }
 
-    public override string ToString() => $"{Title} ({Artists.Count} artists, {Songs.Count} songs)";
+    public override string ToString()
+    {
+        return $"{Title} (Album)";
+    }
 }
