@@ -30,6 +30,14 @@ public class Person
         return null;
     }
 
+    public Playlist CreatePlaylist(string title)
+    {
+        var playlist = new Playlist(this, title);
+        Playlists.Add(playlist);
+        return playlist;
+    }
+
+
     public override string ToString()
     {
         return Naam;
