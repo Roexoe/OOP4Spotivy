@@ -28,7 +28,15 @@ public class Client
     public void NextSong() { }
     public void SetShuffle(bool shuffle) { }
     public void SetRepeat(bool repeat) { }
-    public void CreatePlaylist(string title) { }
+    public void CreatePlaylist(string title)
+    {
+        if (ActiveUser != null)
+        {
+            ActiveUser.CreatePlaylist(title);
+                Console.WriteLine($"Afspeellijst '{title}' aangemaakt.");
+        }
+    }
+
     public void SelectPlaylist(int index) { }
     public void RemovePlaylist(int index) { }
     public void AddToPlaylist(int index) { }
