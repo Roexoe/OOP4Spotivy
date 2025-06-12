@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq; // Voeg deze toe voor de OfType functie
+using System.Linq;
 
 namespace OOP4Spotivy.NewFolder
 {
@@ -13,7 +13,7 @@ namespace OOP4Spotivy.NewFolder
             var albums = new List<Album>();
             var songs = new List<Song>();
 
-            // Voorbeeldartiesten aanmaken - voeg een lege albumlijst toe
+            // Voorbeeldartiesten
             var artist1 = new Artist("The Beatles", new List<Album>());
             var artist2 = new Artist("Queen", new List<Album>());
             var artist3 = new Artist("Michael Jackson", new List<Album>());
@@ -24,7 +24,7 @@ namespace OOP4Spotivy.NewFolder
             songs.Add(song1);
             songs.Add(song2);
 
-            // Voorbeeldalbums met liedjes aanmaken
+            // Voorbeeldalbums met liedjes
             var albumSongs1 = new List<Song>
             {
                 new Song("Album 1 Track 1", new List<Artist> { artist1 }, 210, Genres.Pop),
@@ -39,13 +39,11 @@ namespace OOP4Spotivy.NewFolder
                 new Song("Album 2 Track 3", new List<Artist> { artist2, artist3 }, 250, Genres.Pop)
             };
 
-            // Albums aanmaken en toevoegen aan de lijst
             var album1 = new Album(new List<Artist> { artist1 }, "Greatest Hits Vol. 1", albumSongs1);
             var album2 = new Album(new List<Artist> { artist2, artist3 }, "Rock Classics", albumSongs2);
             albums.Add(album1);
             albums.Add(album2);
 
-            // Voeg albumliedjes toe aan de algemene liederenlijst
             songs.AddRange(albumSongs1);
             songs.AddRange(albumSongs2);
 
@@ -53,8 +51,8 @@ namespace OOP4Spotivy.NewFolder
             {
                 ActiveUser = hoofdgebruiker
             };
-            client.AllSongs = songs; // Zorg dat AllSongs gevuld is
-            client.AllAlbums = albums; // Zorg dat AllAlbums gevuld is
+            client.AllSongs = songs;
+            client.AllAlbums = albums;
 
             while (true)
             {
@@ -64,26 +62,20 @@ namespace OOP4Spotivy.NewFolder
                 Console.WriteLine("3. Verwijder een liedje uit een afspeellijst");
                 Console.WriteLine("4. Speel een liedje uit een afspeellijst af");
                 Console.WriteLine("5. Voeg een album toe aan een afspeellijst");
+                Console.WriteLine("6. Speel een liedje uit de algemene lijst af");
                 Console.WriteLine("0. Afsluiten");
                 Console.Write("Kies een optie: ");
-                string? keuze = Console.ReadLine(); // Nullable string
+                string? keuze = Console.ReadLine();
 
-                // Keuze 1: Maak een nieuwe afspeellijst aan
                 if (keuze == "1")
                 {
                     Console.Write("Geef een naam voor de nieuwe afspeellijst: ");
-                    string? naam = Console.ReadLine(); // Nullable string
-                    if (!string.IsNullOrEmpty(naam)) // Check op null
-                    {
+                    string? naam = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(naam))
                         client.ActiveUser.CreatePlaylist(naam);
-                    }
                     else
-                    {
                         Console.WriteLine("Ongeldige naam voor afspeellijst.");
-                    }
                 }
-
-                // Keuze 2: Voeg een liedje toe
                 else if (keuze == "2")
                 {
                     var playlists = client.ActiveUser.Playlists;
@@ -94,9 +86,7 @@ namespace OOP4Spotivy.NewFolder
                     }
                     Console.WriteLine("Kies een afspeellijst:");
                     for (int i = 0; i < playlists.Count; i++)
-                    {
                         Console.WriteLine($"{i + 1}. {playlists[i].Title}");
-                    }
                     if (!int.TryParse(Console.ReadLine(), out int playlistIndex) || playlistIndex < 1 || playlistIndex > playlists.Count)
                     {
                         Console.WriteLine("Ongeldige keuze.");
@@ -111,21 +101,16 @@ namespace OOP4Spotivy.NewFolder
                     }
                     Console.WriteLine("Kies een liedje om toe te voegen:");
                     for (int i = 0; i < client.AllSongs.Count; i++)
-                    {
                         Console.WriteLine($"{i + 1}. {client.AllSongs[i].Title}");
-                    }
                     if (!int.TryParse(Console.ReadLine(), out int songIndex) || songIndex < 1 || songIndex > client.AllSongs.Count)
                     {
                         Console.WriteLine("Ongeldige keuze.");
                         continue;
                     }
                     var gekozenSong = client.AllSongs[songIndex - 1];
-
                     gekozenPlaylist.Add(gekozenSong);
                     Console.WriteLine($"Liedje '{gekozenSong.Title}' toegevoegd aan afspeellijst '{gekozenPlaylist.Title}'.");
                 }
-
-                // Keuze 3: Verwijder een liedje uit je afspeellijst
                 else if (keuze == "3")
                 {
                     var playlists = client.ActiveUser.Playlists;
@@ -136,16 +121,13 @@ namespace OOP4Spotivy.NewFolder
                     }
                     Console.WriteLine("Kies een afspeellijst:");
                     for (int i = 0; i < playlists.Count; i++)
-                    {
                         Console.WriteLine($"{i + 1}. {playlists[i].Title}");
-                    }
                     if (!int.TryParse(Console.ReadLine(), out int playlistIndex) || playlistIndex < 1 || playlistIndex > playlists.Count)
                     {
                         Console.WriteLine("Ongeldige keuze.");
                         continue;
                     }
                     var gekozenPlaylist = playlists[playlistIndex - 1];
-
                     var playables = gekozenPlaylist.ShowPlayables();
                     if (playables.Count == 0)
                     {
@@ -154,12 +136,7 @@ namespace OOP4Spotivy.NewFolder
                     }
                     Console.WriteLine("Kies een liedje om te verwijderen:");
                     for (int i = 0; i < playables.Count; i++)
-                    {
-                        if (playables[i] is Song song)
-                            Console.WriteLine($"{i + 1}. {song.Title}");
-                        else
-                            Console.WriteLine($"{i + 1}. [Niet een los liedje]");
-                    }
+                        Console.WriteLine($"{i + 1}. {(playables[i] is Song s ? s.Title : "[Niet een los liedje]")}");
                     if (!int.TryParse(Console.ReadLine(), out int songIndex) || songIndex < 1 || songIndex > playables.Count)
                     {
                         Console.WriteLine("Ongeldige keuze.");
@@ -169,8 +146,6 @@ namespace OOP4Spotivy.NewFolder
                     gekozenPlaylist.Remove(teVerwijderen);
                     Console.WriteLine("Liedje verwijderd uit de afspeellijst.");
                 }
-
-                // KEUZE 4: Speel een liedje uit een afspeellijst af
                 else if (keuze == "4")
                 {
                     var playlists = client.ActiveUser.Playlists;
@@ -181,16 +156,13 @@ namespace OOP4Spotivy.NewFolder
                     }
                     Console.WriteLine("Kies een afspeellijst:");
                     for (int i = 0; i < playlists.Count; i++)
-                    {
                         Console.WriteLine($"{i + 1}. {playlists[i].Title}");
-                    }
                     if (!int.TryParse(Console.ReadLine(), out int playlistIndex) || playlistIndex < 1 || playlistIndex > playlists.Count)
                     {
                         Console.WriteLine("Ongeldige keuze.");
                         continue;
                     }
                     var gekozenPlaylist = playlists[playlistIndex - 1];
-
                     var playables = gekozenPlaylist.ShowPlayables();
                     if (playables.Count == 0)
                     {
@@ -199,12 +171,7 @@ namespace OOP4Spotivy.NewFolder
                     }
                     Console.WriteLine("Kies een liedje om af te spelen:");
                     for (int i = 0; i < playables.Count; i++)
-                    {
-                        if (playables[i] is Song song)
-                            Console.WriteLine($"{i + 1}. {song.Title}");
-                        else
-                            Console.WriteLine($"{i + 1}. [Niet een los liedje]");
-                    }
+                        Console.WriteLine($"{i + 1}. {(playables[i] is Song s ? s.Title : "[Niet een los liedje]")}");
                     if (!int.TryParse(Console.ReadLine(), out int songIndex) || songIndex < 1 || songIndex > playables.Count)
                     {
                         Console.WriteLine("Ongeldige keuze.");
@@ -213,8 +180,6 @@ namespace OOP4Spotivy.NewFolder
                     var teSpelen = playables[songIndex - 1];
                     teSpelen.Play();
                 }
-
-                // Keuze 5: Voeg een album toe aan een afspeellijst
                 else if (keuze == "5")
                 {
                     var playlists = client.ActiveUser.Playlists;
@@ -225,16 +190,13 @@ namespace OOP4Spotivy.NewFolder
                     }
                     Console.WriteLine("Kies een afspeellijst:");
                     for (int i = 0; i < playlists.Count; i++)
-                    {
                         Console.WriteLine($"{i + 1}. {playlists[i].Title}");
-                    }
                     if (!int.TryParse(Console.ReadLine(), out int playlistIndex) || playlistIndex < 1 || playlistIndex > playlists.Count)
                     {
                         Console.WriteLine("Ongeldige keuze.");
                         continue;
                     }
                     var gekozenPlaylist = playlists[playlistIndex - 1];
-
                     if (client.AllAlbums == null || client.AllAlbums.Count == 0)
                     {
                         Console.WriteLine("Er zijn geen albums beschikbaar.");
@@ -242,26 +204,36 @@ namespace OOP4Spotivy.NewFolder
                     }
                     Console.WriteLine("Kies een album om toe te voegen:");
                     for (int i = 0; i < client.AllAlbums.Count; i++)
-                    {
                         Console.WriteLine($"{i + 1}. {client.AllAlbums[i].Title}");
-                    }
                     if (!int.TryParse(Console.ReadLine(), out int albumIndex) || albumIndex < 1 || albumIndex > client.AllAlbums.Count)
                     {
                         Console.WriteLine("Ongeldige keuze.");
                         continue;
                     }
                     var gekozenAlbum = client.AllAlbums[albumIndex - 1];
-
-                    // Voeg alle songs van het album toe aan de playlist
                     var albumSongs = gekozenAlbum.ShowPlayables();
                     foreach (var playable in albumSongs)
-                    {
                         gekozenPlaylist.Add(playable);
-                    }
                     Console.WriteLine($"Alle liedjes van album '{gekozenAlbum.Title}' zijn toegevoegd aan afspeellijst '{gekozenPlaylist.Title}'.");
                 }
-
-                // Keuze 0: Afsluiten
+                else if (keuze == "6")
+                {
+                    if (client.AllSongs.Count == 0)
+                    {
+                        Console.WriteLine("Er zijn geen liedjes beschikbaar.");
+                        continue;
+                    }
+                    Console.WriteLine("Kies een liedje om af te spelen:");
+                    for (int i = 0; i < client.AllSongs.Count; i++)
+                        Console.WriteLine($"{i + 1}. {client.AllSongs[i].Title}");
+                    if (!int.TryParse(Console.ReadLine(), out int songIndex) || songIndex < 1 || songIndex > client.AllSongs.Count)
+                    {
+                        Console.WriteLine("Ongeldige keuze.");
+                        continue;
+                    }
+                    var teSpelen = client.AllSongs[songIndex - 1];
+                    teSpelen.Play();
+                }
                 else if (keuze == "0")
                 {
                     Console.WriteLine("Bedankt voor het gebruiken van Spotivy. Tot ziens!");
