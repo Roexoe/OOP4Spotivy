@@ -20,23 +20,23 @@ namespace OOP4Spotivy.NewFolder
 
             // Voorbeeldliedjes
             var song1 = new Song("Happy Song", new List<Artist> { artist1 }, 180, Genres.Pop);
-            var song2 = new Song("Sad Song", new List<Artist> { artist2 }, 200, Genres.Rock);
+            var song2 = new Song("Sad Song", new List<Artist> { artist2 }, 120, Genres.Rock);
             songs.Add(song1);
             songs.Add(song2);
 
             // Voorbeeldalbums met liedjes
             var albumSongs1 = new List<Song>
             {
-                new Song("Album 1 Track 1", new List<Artist> { artist1 }, 210, Genres.Pop),
-                new Song("Album 1 Track 2", new List<Artist> { artist1 }, 195, Genres.Pop),
-                new Song("Album 1 Track 3", new List<Artist> { artist1, artist2 }, 180, Genres.Rock)
+                new Song("Album 1 Track 1", new List<Artist> { artist1 }, 160, Genres.Pop),
+                new Song("Album 1 Track 2", new List<Artist> { artist1 }, 170, Genres.Pop),
+                new Song("Album 1 Track 3", new List<Artist> { artist1, artist2 }, 150, Genres.Rock)
             };
 
             var albumSongs2 = new List<Song>
             {
-                new Song("Album 2 Track 1", new List<Artist> { artist2 }, 220, Genres.Rock),
-                new Song("Album 2 Track 2", new List<Artist> { artist2 }, 190, Genres.Rock),
-                new Song("Album 2 Track 3", new List<Artist> { artist2, artist3 }, 250, Genres.Pop)
+                new Song("Album 2 Track 1", new List<Artist> { artist2 }, 130, Genres.Rock),
+                new Song("Album 2 Track 2", new List<Artist> { artist2 }, 140, Genres.Rock),
+                new Song("Album 2 Track 3", new List<Artist> { artist2, artist3 }, 125, Genres.Pop)
             };
 
             var album1 = new Album(new List<Artist> { artist1 }, "Greatest Hits Vol. 1", albumSongs1);
@@ -64,6 +64,8 @@ namespace OOP4Spotivy.NewFolder
                 Console.WriteLine("5. Voeg een album toe aan een afspeellijst");
                 Console.WriteLine("6. Speel een liedje uit de algemene lijst af");
                 Console.WriteLine("7. Toon huidig afgespeeld nummer");
+                Console.WriteLine("8. Pauzeer huidig nummer");
+                Console.WriteLine("9. Speel huidig nummer verder");
                 Console.WriteLine("0. Afsluiten");
                 Console.Write("Kies een optie: ");
                 string? keuze = Console.ReadLine();
@@ -238,6 +240,27 @@ namespace OOP4Spotivy.NewFolder
                     teSpelen.Play();
                 }
                 else if (keuze == "7")
+                {
+                    if (client.CurrentlyPlaying is Song huidig)
+                    {
+                        string artiesten = huidig.Artists != null && huidig.Artists.Count > 0
+                            ? string.Join(", ", huidig.Artists.ConvertAll(a => a.Naam))
+                            : "Onbekend";
+                        Console.WriteLine($"Speelt nu af: '{huidig.Title}' - Artiest(en): {artiesten} - Genre: {huidig.SongGenre} - Nog {huidig.Length} seconden");
+                    }
+                    else
+                        Console.WriteLine("Er wordt momenteel geen nummer afgespeeld.");
+                }
+                else if (keuze == "8")
+                {
+                    if (client.CurrentlyPlaying is Song huidig)
+                        huidig.Pause();
+                    else
+                        Console.WriteLine("Er wordt momenteel geen nummer afgespeeld.");
+                }
+
+
+                else if (keuze == "9")
                 {
                     if (client.CurrentlyPlaying is Song huidig)
                         huidig.Play();
