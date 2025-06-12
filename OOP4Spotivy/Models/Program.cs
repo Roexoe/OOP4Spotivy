@@ -63,6 +63,7 @@ namespace OOP4Spotivy.NewFolder
                 Console.WriteLine("4. Speel een liedje uit een afspeellijst af");
                 Console.WriteLine("5. Voeg een album toe aan een afspeellijst");
                 Console.WriteLine("6. Speel een liedje uit de algemene lijst af");
+                Console.WriteLine("7. Toon huidig afgespeeld nummer");
                 Console.WriteLine("0. Afsluiten");
                 Console.Write("Kies een optie: ");
                 string? keuze = Console.ReadLine();
@@ -178,6 +179,7 @@ namespace OOP4Spotivy.NewFolder
                         continue;
                     }
                     var teSpelen = playables[songIndex - 1];
+                    client.CurrentlyPlaying = teSpelen;
                     teSpelen.Play();
                 }
                 else if (keuze == "5")
@@ -232,7 +234,15 @@ namespace OOP4Spotivy.NewFolder
                         continue;
                     }
                     var teSpelen = client.AllSongs[songIndex - 1];
+                    client.CurrentlyPlaying = teSpelen;
                     teSpelen.Play();
+                }
+                else if (keuze == "7")
+                {
+                    if (client.CurrentlyPlaying is Song huidig)
+                        huidig.Play();
+                    else
+                        Console.WriteLine("Er wordt momenteel geen nummer afgespeeld.");
                 }
                 else if (keuze == "0")
                 {
