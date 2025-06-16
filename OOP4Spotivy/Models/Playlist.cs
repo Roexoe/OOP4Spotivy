@@ -7,7 +7,6 @@ public class Playlist : SongCollection
     public Playlist(Person owner, string title) : base(title)
     {
         Owner = owner;
-        playables = new List<iPlayable>();
     }
 
     public void Add(iPlayable playable)

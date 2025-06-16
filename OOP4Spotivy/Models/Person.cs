@@ -10,7 +10,7 @@ public class Person
     {
         Naam = naam;
         Friends = new List<Person>();
-        Playlists = new List<Playlist>();
+        Playlists = new List<Playlist>(); // <-- Voeg deze regel toe!
     }
 
     public List<Person> ShowFriends()
@@ -29,6 +29,14 @@ public class Person
             return Playlists[index];
         return null;
     }
+
+    public Playlist CreatePlaylist(string title)
+    {
+        var playlist = new Playlist(this, title);
+        Playlists.Add(playlist);
+        return playlist;
+    }
+
 
     public override string ToString()
     {

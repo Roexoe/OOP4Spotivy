@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using OOP4Spotivy; // Of de namespace waar Album in staat
+
 
 public class Album : SongCollection
 {
