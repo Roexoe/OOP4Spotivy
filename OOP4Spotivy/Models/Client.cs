@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 public class Client
@@ -13,13 +12,7 @@ public class Client
     public List<Song> AllSongs { get; set; }
     public List<Person> AllUsers { get; set; }
 
-    public Client(List<Person> users, List<Album> albums, List<Song> songs)
-    {
-        AllUsers = users;
-        AllAlbums = albums;
-        AllSongs = songs;
-    }
-
+    public Client(List<Person> users, List<Album> albums, List<Song> songs) { }
     public void SetActiveUser(Person person) { }
     public void ShowAllAlbums() { }
     public void SelectAlbum(int index) { }
@@ -35,17 +28,7 @@ public class Client
     public void NextSong() { }
     public void SetShuffle(bool shuffle) { }
     public void SetRepeat(bool repeat) { }
-    public void CreatePlaylist(string title)
-    {
-        if (ActiveUser != null)
-        {
-            // SuperUser heeft CreatePlayList met een hoofdletter 'L'
-            var playlist = ActiveUser.CreatePlaylist(title);
-            Console.WriteLine($"Afspeellijst '{title}' aangemaakt.");
-
-        }
-    }
-
+    public void CreatePlaylist(string title) { }
     public void SelectPlaylist(int index) { }
     public void RemovePlaylist(int index) { }
     public void AddToPlaylist(int index) { }
