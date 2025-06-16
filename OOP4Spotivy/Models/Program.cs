@@ -352,7 +352,7 @@ namespace OOP4Spotivy.NewFolder
                         client.CurrentlyPlaying = huidig;
 
                         // Toon duidelijke informatie over het huidige nummer en waar we zijn in de afspeellijst
-                        Console.WriteLine("\n--------------------------------------------------");
+                        Console.WriteLine("\n---------------------------------------------------");
                         Console.WriteLine($"HUIDIGE POSITIE: {currentIndex + 1} van {afspeellijst.Count}");
 
                         if (huidig is Song s)
@@ -370,7 +370,7 @@ namespace OOP4Spotivy.NewFolder
                         {
                             Console.WriteLine($"NU SPEELT: {huidig}");
                         }
-                        Console.WriteLine("--------------------------------------------------");
+                        Console.WriteLine("---------------------------------------------------");
 
                         // Speel het nummer af als niet gepauzeerd
                         if (!isPaused)
