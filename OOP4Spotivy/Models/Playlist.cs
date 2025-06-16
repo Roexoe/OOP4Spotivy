@@ -56,5 +56,6 @@ public class Playlist : SongCollection
         // Stop na het eerste nummer, zodat bediening via menu kan
     }
 
+
     public override string ToString() => $"{Title} (Owner: {Owner.Naam}, {playables.Count} items)";
 }
