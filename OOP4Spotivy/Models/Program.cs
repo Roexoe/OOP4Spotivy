@@ -56,7 +56,6 @@ namespace OOP4Spotivy.NewFolder
 
             while (true)
             {
-                Console.WriteLine("\n===== SPOTIVY MENU =====");
                 Console.WriteLine("1. Maak een nieuwe afspeellijst aan");
                 Console.WriteLine("2. Voeg een liedje toe aan een afspeellijst");
                 Console.WriteLine("3. Verwijder een liedje uit een afspeellijst");
@@ -66,6 +65,8 @@ namespace OOP4Spotivy.NewFolder
                 Console.WriteLine("7. Toon huidig afgespeeld nummer");
                 Console.WriteLine("8. Pauzeer huidig nummer");
                 Console.WriteLine("9. Speel huidig nummer verder");
+                Console.WriteLine("11. Speel een afspeellijst af (volgorde of shuffle)");
+                Console.WriteLine("12. Speel een album af (volgorde of shuffle)");
                 Console.WriteLine("0. Afsluiten");
                 Console.Write("Kies een optie: ");
                 string? keuze = Console.ReadLine();
@@ -397,6 +398,158 @@ namespace OOP4Spotivy.NewFolder
                                 else
                                 {
                                     Console.WriteLine("Einde van de afspeellijst.");
+                                    stop = true;
+                                }
+                                break;
+                            case "2":
+                                if (currentIndex > 0)
+                                {
+                                    currentIndex--;
+                                    isPaused = false;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Dit is het eerste nummer.");
+                                }
+                                break;
+                            case "3":
+                                if (huidig is Song song)
+                                {
+                                    song.Pause();
+                                    isPaused = true;
+                                }
+                                break;
+                            case "4":
+                                if (huidig is Song currentSong)
+                                {
+                                    currentSong.Play();
+                                    isPaused = false;
+                                }
+                                break;
+                            case "5":
+                                stop = true;
+                                break;
+                            default:
+                                Console.WriteLine("Ongeldige keuze.");
+                                break;
+                        }
+                    }
+                }
+
+                else if (keuze == "12")
+                {
+                    if (client.AllAlbums == null || client.AllAlbums.Count == 0)
+                    {
+                        Console.WriteLine("Er zijn geen albums beschikbaar.");
+                        continue;
+                    }
+                    Console.WriteLine("Kies een album:");
+                    for (int i = 0; i < client.AllAlbums.Count; i++)
+                        Console.WriteLine($"{i + 1}. {client.AllAlbums[i].Title}");
+                    if (!int.TryParse(Console.ReadLine(), out int albumIndex) || albumIndex < 1 || albumIndex > client.AllAlbums.Count)
+                    {
+                        Console.WriteLine("Ongeldige keuze.");
+                        continue;
+                    }
+                    var gekozenAlbum = client.AllAlbums[albumIndex - 1];
+                    var playables = gekozenAlbum.ShowPlayables();
+                    if (playables.Count == 0)
+                    {
+                        Console.WriteLine("Dit album bevat geen liedjes.");
+                        continue;
+                    }
+
+                    Console.WriteLine("1. Speel op volgorde af");
+                    Console.WriteLine("2. Speel in willekeurige volgorde af");
+                    var subkeuze = Console.ReadLine();
+
+                    List<iPlayable> afspeellijst;
+                    if (subkeuze == "1")
+                    {
+                        afspeellijst = playables;
+                        Console.WriteLine("Normale afspeelvolgorde:");
+                    }
+                    else if (subkeuze == "2")
+                    {
+                        afspeellijst = new List<iPlayable>(playables);
+                        var rnd = new Random();
+                        int n = afspeellijst.Count;
+                        while (n > 1)
+                        {
+                            n--;
+                            int k = rnd.Next(n + 1);
+                            (afspeellijst[n], afspeellijst[k]) = (afspeellijst[k], afspeellijst[n]);
+                        }
+                        Console.WriteLine("Willekeurige afspeelvolgorde:");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Ongeldige keuze.");
+                        continue;
+                    }
+
+                    for (int i = 0; i < afspeellijst.Count; i++)
+                    {
+                        if (afspeellijst[i] is Song s)
+                            Console.WriteLine($"{i + 1}. {s.Title} - {string.Join(", ", s.Artists.Select(a => a.Naam))}");
+                        else
+                            Console.WriteLine($"{i + 1}. {afspeellijst[i]}");
+                    }
+
+                    int currentIndex = 0;
+                    bool stop = false;
+                    bool isPaused = false;
+
+                    while (!stop && afspeellijst.Count > 0 && currentIndex < afspeellijst.Count)
+                    {
+                        var huidig = afspeellijst[currentIndex];
+                        client.CurrentlyPlaying = huidig;
+
+                        Console.WriteLine("\n--------------------------------------------------");
+                        Console.WriteLine($"HUIDIGE POSITIE: {currentIndex + 1} van {afspeellijst.Count}");
+
+                        if (huidig is Song s)
+                        {
+                            string artiesten = string.Join(", ", s.Artists.Select(a => a.Naam));
+                            Console.WriteLine($"NU SPEELT: '{s.Title}' - Artiest(en): {artiesten} - Genre: {s.SongGenre} - Duur: {s.Length} sec");
+
+                            if (currentIndex < afspeellijst.Count - 1 && afspeellijst[currentIndex + 1] is Song nextSong)
+                            {
+                                string nextArtists = string.Join(", ", nextSong.Artists.Select(a => a.Naam));
+                                Console.WriteLine($"VOLGENDE: '{nextSong.Title}' - {nextArtists}");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine($"NU SPEELT: {huidig}");
+                        }
+                        Console.WriteLine("--------------------------------------------------");
+
+                        if (!isPaused)
+                        {
+                            huidig.Play();
+                        }
+
+                        Console.WriteLine("\nBediening:");
+                        Console.WriteLine("1. Volgende");
+                        Console.WriteLine("2. Vorige");
+                        Console.WriteLine("3. Pauze");
+                        Console.WriteLine("4. Verder spelen");
+                        Console.WriteLine("5. Stoppen");
+                        Console.Write("Kies een optie: ");
+                        var afspeelKeuze = Console.ReadLine();
+
+                        switch (afspeelKeuze)
+                        {
+                            case "1":
+                                if (currentIndex < afspeellijst.Count - 1)
+                                {
+                                    currentIndex++;
+                                    isPaused = false;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Einde van het album.");
                                     stop = true;
                                 }
                                 break;
