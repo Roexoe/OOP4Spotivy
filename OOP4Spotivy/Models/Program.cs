@@ -17,12 +17,21 @@ namespace OOP4Spotivy.NewFolder
             var artist1 = new Artist("The Beatles", new List<Album>());
             var artist2 = new Artist("Queen", new List<Album>());
             var artist3 = new Artist("Michael Jackson", new List<Album>());
+            var artist4 = new Artist("Taylor Swift", new List<Album>());
+            var artist5 = new Artist("Ed Sheeran", new List<Album>());
+            var artist6 = new Artist("Adele", new List<Album>());
 
             // Voorbeeldliedjes
             var song1 = new Song("Happy Song", new List<Artist> { artist1 }, 180, Genres.Pop);
             var song2 = new Song("Sad Song", new List<Artist> { artist2 }, 120, Genres.Rock);
-            songs.Add(song1);
-            songs.Add(song2);
+            var song3 = new Song("Shape of You", new List<Artist> { artist5 }, 233, Genres.Pop);
+            var song4 = new Song("Rolling in the Deep", new List<Artist> { artist6 }, 228, Genres.Pop);
+            var song5 = new Song("Blank Space", new List<Artist> { artist4 }, 231, Genres.Pop);
+            var song6 = new Song("Thinking Out Loud", new List<Artist> { artist5 }, 281, Genres.Pop);
+            var song7 = new Song("Hello", new List<Artist> { artist6 }, 295, Genres.Pop);
+            var song8 = new Song("Bad Blood", new List<Artist> { artist4 }, 211, Genres.Pop);
+
+            songs.AddRange(new[] {song1, song2, song3, song4, song5, song6, song7, song8 });
 
             // Voorbeeldalbums met liedjes
             var albumSongs1 = new List<Song>
@@ -38,14 +47,40 @@ namespace OOP4Spotivy.NewFolder
                 new Song("Album 2 Track 2", new List<Artist> { artist2 }, 140, Genres.Rock),
                 new Song("Album 2 Track 3", new List<Artist> { artist2, artist3 }, 125, Genres.Pop)
             };
+            var albumSongs3 = new List<Song>
+            {
+                new Song("Love Story", new List<Artist> { artist4 }, 230, Genres.Pop),
+                new Song("You Belong With Me", new List<Artist> { artist4 }, 220, Genres.Pop),
+                new Song("Wildest Dreams", new List<Artist> { artist4 }, 210, Genres.Pop)
+            };
+
+            var albumSongs4 = new List<Song>
+            {
+                new Song("Photograph", new List<Artist> { artist5 }, 258, Genres.Pop),
+                new Song("Perfect", new List<Artist> { artist5 }, 263, Genres.Pop),
+                new Song("Castle on the Hill", new List<Artist> { artist5 }, 261, Genres.Rock)
+            };
+
+            var albumSongs5 = new List<Song>
+            {
+                new Song("Someone Like You", new List<Artist> { artist6 }, 285, Genres.Pop),
+                new Song("Set Fire to the Rain", new List<Artist> { artist6 }, 242, Genres.Pop),
+                new Song("Skyfall", new List<Artist> { artist6 }, 285, Genres.Pop)
+            };
 
             var album1 = new Album(new List<Artist> { artist1 }, "Greatest Hits Vol. 1", albumSongs1);
             var album2 = new Album(new List<Artist> { artist2, artist3 }, "Rock Classics", albumSongs2);
-            albums.Add(album1);
-            albums.Add(album2);
-
+            var album3 = new Album(new List<Artist> { artist4 }, "1989", albumSongs3);
+            var album4 = new Album(new List<Artist> { artist5 }, "Divide", albumSongs4);
+            var album5 = new Album(new List<Artist> { artist6 }, "21", albumSongs5);
+          
+            albums.AddRange(new[] {album1, album2, album3, album4, album5 });
+            
             songs.AddRange(albumSongs1);
             songs.AddRange(albumSongs2);
+            songs.AddRange(albumSongs3);
+            songs.AddRange(albumSongs4);
+            songs.AddRange(albumSongs5);
 
             var client = new Client(gebruikers, albums, songs)
             {
@@ -230,7 +265,13 @@ namespace OOP4Spotivy.NewFolder
                     }
                     Console.WriteLine("Kies een liedje om af te spelen:");
                     for (int i = 0; i < client.AllSongs.Count; i++)
-                        Console.WriteLine($"{i + 1}. {client.AllSongs[i].Title}");
+                    {
+                        var song = client.AllSongs[i];
+                        string artiesten = song.Artists != null && song.Artists.Count > 0
+                            ? string.Join(", ", song.Artists.Select(a => a.Naam))
+                            : "Onbekend";
+                        Console.WriteLine($"{i + 1}. {song.Title} - Artiest(en): {artiesten}");
+                    }
                     if (!int.TryParse(Console.ReadLine(), out int songIndex) || songIndex < 1 || songIndex > client.AllSongs.Count)
                     {
                         Console.WriteLine("Ongeldige keuze.");
@@ -445,7 +486,13 @@ namespace OOP4Spotivy.NewFolder
                     }
                     Console.WriteLine("Kies een album:");
                     for (int i = 0; i < client.AllAlbums.Count; i++)
-                        Console.WriteLine($"{i + 1}. {client.AllAlbums[i].Title}");
+                    {
+                        var album = client.AllAlbums[i];
+                        string artiesten = album.Artists != null && album.Artists.Count > 0
+                            ? string.Join(", ", album.Artists.Select(a => a.Naam))
+                            : "Onbekend";
+                        Console.WriteLine($"{i + 1}. {album.Title} - Artiest(en): {artiesten}");
+                    }
                     if (!int.TryParse(Console.ReadLine(), out int albumIndex) || albumIndex < 1 || albumIndex > client.AllAlbums.Count)
                     {
                         Console.WriteLine("Ongeldige keuze.");
@@ -587,6 +634,7 @@ namespace OOP4Spotivy.NewFolder
                         }
                     }
                 }
+
 
 
                 else if (keuze == "0")
