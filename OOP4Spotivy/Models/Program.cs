@@ -94,11 +94,11 @@ namespace OOP4Spotivy.NewFolder
             songs.AddRange(albumSongs5);
 
             // Maak een voorbeeldplaylist voor elke gebruiker
-            gebruiker1.CreatePlaylist("Alice's Favorieten");
+            gebruiker1.CreatePlaylist("Pim Hardcoded");
             gebruiker1.Playlists[0].Add(song5);
             gebruiker1.Playlists[0].Add(song7);
 
-            gebruiker2.CreatePlaylist("Bob's Rock Playlist");
+            gebruiker2.CreatePlaylist("Max Hardcoded");
             gebruiker2.Playlists[0].Add(song2);
             gebruiker2.Playlists[0].Add(albumSongs4[2]); // Castle on the Hill
 
@@ -723,6 +723,7 @@ namespace OOP4Spotivy.NewFolder
                     Console.WriteLine("5. Vriendschapsverzoek weigeren");
                     Console.WriteLine("6. Verwijder een vriend");
                     Console.WriteLine("7. Bekijk speellijsten van een vriend");
+                    Console.WriteLine("8. Vergelijk een speellijst met die van een vriend");
                     Console.WriteLine("0. Terug naar hoofdmenu");
                     Console.Write("Kies een optie: ");
 
@@ -982,6 +983,104 @@ namespace OOP4Spotivy.NewFolder
                             {
                                 Console.WriteLine($"{i + 1}. [Niet een los liedje]");
                             }
+                        }
+                    }
+                    // 8. Vergelijk een speellijst met die van een vriend
+                    else if (vriendenKeuze == "8")
+                    {
+                        var vrienden = client.ActiveUser.Friends;
+                        if (vrienden.Count == 0)
+                        {
+                            Console.WriteLine("Je hebt nog geen vrienden.");
+                            continue;
+                        }
+
+                        Console.WriteLine("\nKies een vriend om mee te vergelijken:");
+                        for (int i = 0; i < vrienden.Count; i++)
+                        {
+                            Console.WriteLine($"{i + 1}. {vrienden[i].Naam}");
+                        }
+
+                        if (!int.TryParse(Console.ReadLine(), out int vriendIndex) || vriendIndex < 1 || vriendIndex > vrienden.Count)
+                        {
+                            Console.WriteLine("Ongeldige keuze.");
+                            continue;
+                        }
+
+                        var gekozenVriend = vrienden[vriendIndex - 1];
+                        var vriendPlaylists = gekozenVriend.Playlists;
+                        if (vriendPlaylists.Count == 0)
+                        {
+                            Console.WriteLine($"{gekozenVriend.Naam} heeft geen speellijsten.");
+                            continue;
+                        }
+
+                        Console.WriteLine($"\nSpeellijsten van {gekozenVriend.Naam}:");
+                        for (int i = 0; i < vriendPlaylists.Count; i++)
+                        {
+                            Console.WriteLine($"{i + 1}. {vriendPlaylists[i].Title}");
+                        }
+                        Console.Write("Kies een speellijst van je vriend: ");
+                        if (!int.TryParse(Console.ReadLine(), out int vriendPlaylistIndex) || vriendPlaylistIndex < 1 || vriendPlaylistIndex > vriendPlaylists.Count)
+                        {
+                            Console.WriteLine("Ongeldige keuze.");
+                            continue;
+                        }
+                        var vriendPlaylist = vriendPlaylists[vriendPlaylistIndex - 1];
+                        var vriendSongs = vriendPlaylist.ShowPlayables().OfType<Song>().ToList();
+                        if (vriendSongs.Count == 0)
+                        {
+                            Console.WriteLine("Deze speellijst bevat geen nummers.");
+                            continue;
+                        }
+
+                        // Kies eigen speellijst
+                        var mijnPlaylists = client.ActiveUser.Playlists;
+                        if (mijnPlaylists.Count == 0)
+                        {
+                            Console.WriteLine("Je hebt zelf geen speellijsten.");
+                            continue;
+                        }
+                        Console.WriteLine("\nJouw speellijsten:");
+                        for (int i = 0; i < mijnPlaylists.Count; i++)
+                        {
+                            Console.WriteLine($"{i + 1}. {mijnPlaylists[i].Title}");
+                        }
+                        Console.Write("Kies een van je eigen speellijsten: ");
+                        if (!int.TryParse(Console.ReadLine(), out int mijnPlaylistIndex) || mijnPlaylistIndex < 1 || mijnPlaylistIndex > mijnPlaylists.Count)
+                        {
+                            Console.WriteLine("Ongeldige keuze.");
+                            continue;
+                        }
+                        var mijnPlaylist = mijnPlaylists[mijnPlaylistIndex - 1];
+                        var mijnSongs = mijnPlaylist.ShowPlayables().OfType<Song>().ToList();
+                        if (mijnSongs.Count == 0)
+                        {
+                            Console.WriteLine("Jouw speellijst bevat geen nummers.");
+                            continue;
+                        }
+
+                        // Vergelijk op basis van titel en artiesten
+                        var overeenkomend = mijnSongs.Where(ms =>
+                            vriendSongs.Any(vs =>
+                                string.Equals(ms.Title, vs.Title, StringComparison.OrdinalIgnoreCase) &&
+                                ms.Artists.Count == vs.Artists.Count &&
+                                ms.Artists.All(a => vs.Artists.Any(va => va.Naam == a.Naam))
+                            )).ToList();
+
+                        Console.WriteLine($"\nAantal overeenkomende nummers: {overeenkomend.Count}");
+                        if (overeenkomend.Count > 0)
+                        {
+                            Console.WriteLine("Overeenkomende nummers:");
+                            foreach (var song in overeenkomend)
+                            {
+                                string artiesten = string.Join(", ", song.Artists.Select(a => a.Naam));
+                                Console.WriteLine($"- {song.Title} - {artiesten}");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Er zijn geen overeenkomende nummers gevonden.");
                         }
                     }
 
