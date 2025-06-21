@@ -722,6 +722,7 @@ namespace OOP4Spotivy.NewFolder
                     Console.WriteLine("4. Vriendschapsverzoek accepteren");
                     Console.WriteLine("5. Vriendschapsverzoek weigeren");
                     Console.WriteLine("6. Verwijder een vriend");
+                    Console.WriteLine("7. Bekijk speellijsten van een vriend");
                     Console.WriteLine("0. Terug naar hoofdmenu");
                     Console.Write("Kies een optie: ");
 
@@ -913,6 +914,75 @@ namespace OOP4Spotivy.NewFolder
                         selectedFriend.Friends.Remove(client.ActiveUser);
 
                         Console.WriteLine($"Je bent niet meer bevriend met {selectedFriend.Naam}.");
+                    }
+                    // 7. Bekijk speellijsten van een vriend
+                    else if (vriendenKeuze == "7")
+                    {
+                        var vrienden = client.ActiveUser.Friends;
+                        if (vrienden.Count == 0)
+                        {
+                            Console.WriteLine("Je hebt nog geen vrienden.");
+                            continue;
+                        }
+
+                        Console.WriteLine("\nKies een vriend om diens speellijsten te bekijken:");
+                        for (int i = 0; i < vrienden.Count; i++)
+                        {
+                            Console.WriteLine($"{i + 1}. {vrienden[i].Naam}");
+                        }
+
+                        if (!int.TryParse(Console.ReadLine(), out int vriendIndex) || vriendIndex < 1 || vriendIndex > vrienden.Count)
+                        {
+                            Console.WriteLine("Ongeldige keuze.");
+                            continue;
+                        }
+
+                        var gekozenVriend = vrienden[vriendIndex - 1];
+                        var playlists = gekozenVriend.Playlists;
+
+                        if (playlists.Count == 0)
+                        {
+                            Console.WriteLine($"{gekozenVriend.Naam} heeft geen speellijsten.");
+                            continue;
+                        }
+
+                        Console.WriteLine($"\nSpeellijsten van {gekozenVriend.Naam}:");
+                        for (int i = 0; i < playlists.Count; i++)
+                        {
+                            Console.WriteLine($"{i + 1}. {playlists[i].Title}");
+                        }
+
+                        Console.Write("Kies een speellijst om de nummers te bekijken: ");
+                        if (!int.TryParse(Console.ReadLine(), out int playlistIndex) || playlistIndex < 1 || playlistIndex > playlists.Count)
+                        {
+                            Console.WriteLine("Ongeldige keuze.");
+                            continue;
+                        }
+
+                        var gekozenPlaylist = playlists[playlistIndex - 1];
+                        var playables = gekozenPlaylist.ShowPlayables();
+
+                        if (playables.Count == 0)
+                        {
+                            Console.WriteLine("Deze speellijst bevat geen nummers.");
+                            continue;
+                        }
+
+                        Console.WriteLine($"\nNummers in '{gekozenPlaylist.Title}':");
+                        for (int i = 0; i < playables.Count; i++)
+                        {
+                            if (playables[i] is Song s)
+                            {
+                                string artiesten = s.Artists != null && s.Artists.Count > 0
+                                    ? string.Join(", ", s.Artists.Select(a => a.Naam))
+                                    : "Onbekend";
+                                Console.WriteLine($"{i + 1}. {s.Title} - Artiest(en): {artiesten}");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{i + 1}. [Niet een los liedje]");
+                            }
+                        }
                     }
 
                     // 0. Terug naar hoofdmenu
