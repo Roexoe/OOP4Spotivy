@@ -8,20 +8,20 @@ namespace OOP4Spotivy.NewFolder
     {
         static void Main(string[] args)
         {
-            var hoofdgebruiker = new SuperUser("Hoofdgebruiker");
+            var mainUser = new SuperUser("Hoofdgebruiker");
             // Voeg 2 hardcoded gebruikers toe
-            var gebruiker1 = new SuperUser("Pim");
-            var gebruiker2 = new SuperUser("Max");
+            var user1 = new SuperUser("Pim");
+            var user2 = new SuperUser("Max");
 
-            var gebruikers = new List<Person> { hoofdgebruiker, gebruiker1, gebruiker2 };
+            var users = new List<Person> { mainUser, user1, user2 };
             var albums = new List<Album>();
             var songs = new List<Song>();
 
             // Vriendschapsverzoeken bijhouden
             var friendRequests = new Dictionary<string, List<Person>>();
-            foreach (var gebruiker in gebruikers)
+            foreach (var user in users)
             {
-                friendRequests[gebruiker.Naam] = new List<Person>();
+                friendRequests[user.Naam] = new List<Person>();
             }
 
             // Voorbeeldartiesten
@@ -94,17 +94,17 @@ namespace OOP4Spotivy.NewFolder
             songs.AddRange(albumSongs5);
 
             // Maak een voorbeeldplaylist voor elke gebruiker
-            gebruiker1.CreatePlaylist("Pim Hardcoded");
-            gebruiker1.Playlists[0].Add(song5);
-            gebruiker1.Playlists[0].Add(song7);
+            user1.CreatePlaylist("Pim Hardcoded");
+            user1.Playlists[0].Add(song5);
+            user1.Playlists[0].Add(song7);
 
-            gebruiker2.CreatePlaylist("Max Hardcoded");
-            gebruiker2.Playlists[0].Add(song2);
-            gebruiker2.Playlists[0].Add(albumSongs4[2]); // Castle on the Hill
+            user2.CreatePlaylist("Max Hardcoded");
+            user2.Playlists[0].Add(song2);
+            user2.Playlists[0].Add(albumSongs4[2]); // Castle on the Hill
 
-            var client = new Client(gebruikers, albums, songs)
+            var client = new Client(users, albums, songs)
             {
-                ActiveUser = hoofdgebruiker
+                ActiveUser = mainUser
             };
             client.AllSongs = songs;
             client.AllAlbums = albums;
@@ -128,18 +128,18 @@ namespace OOP4Spotivy.NewFolder
                 Console.WriteLine("13. Vrienden beheren");  // Nieuwe optie
                 Console.WriteLine("0. Afsluiten");
                 Console.Write("Kies een optie: ");
-                string? keuze = Console.ReadLine();
+                string? choice = Console.ReadLine();
 
-                if (keuze == "1")
+                if (choice == "1")
                 {
                     Console.Write("Geef een naam voor de nieuwe afspeellijst: ");
-                    string? naam = Console.ReadLine();
-                    if (!string.IsNullOrEmpty(naam))
-                        client.ActiveUser.CreatePlaylist(naam);
+                    string? name = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(name))
+                        client.ActiveUser.CreatePlaylist(name);
                     else
                         Console.WriteLine("Ongeldige naam voor afspeellijst.");
                 }
-                else if (keuze == "2")
+                else if (choice == "2")
                 {
                     var playlists = client.ActiveUser.Playlists;
                     if (playlists.Count == 0)
@@ -155,7 +155,7 @@ namespace OOP4Spotivy.NewFolder
                         Console.WriteLine("Ongeldige keuze.");
                         continue;
                     }
-                    var gekozenPlaylist = playlists[playlistIndex - 1];
+                    var selectedPlaylist = playlists[playlistIndex - 1];
 
                     if (client.AllSongs.Count == 0)
                     {
@@ -166,21 +166,21 @@ namespace OOP4Spotivy.NewFolder
                     for (int i = 0; i < client.AllSongs.Count; i++)
                     {
                         var song = client.AllSongs[i];
-                        string artiesten = song.Artists != null && song.Artists.Count > 0
+                        string artists = song.Artists != null && song.Artists.Count > 0
                             ? string.Join(", ", song.Artists.Select(a => a.Naam))
                             : "Onbekend";
-                        Console.WriteLine($"{i + 1}. {song.Title} - Artiest(en): {artiesten}");
+                        Console.WriteLine($"{i + 1}. {song.Title} - Artiest(en): {artists}");
                     }
                     if (!int.TryParse(Console.ReadLine(), out int songIndex) || songIndex < 1 || songIndex > client.AllSongs.Count)
                     {
                         Console.WriteLine("Ongeldige keuze.");
                         continue;
                     }
-                    var gekozenSong = client.AllSongs[songIndex - 1];
-                    gekozenPlaylist.Add(gekozenSong);
-                    Console.WriteLine($"Liedje '{gekozenSong.Title}' toegevoegd aan afspeellijst '{gekozenPlaylist.Title}'.");
+                    var selectedSong = client.AllSongs[songIndex - 1];
+                    selectedPlaylist.Add(selectedSong);
+                    Console.WriteLine($"Liedje '{selectedSong.Title}' toegevoegd aan afspeellijst '{selectedPlaylist.Title}'.");
                 }
-                else if (keuze == "3")
+                else if (choice == "3")
                 {
                     var playlists = client.ActiveUser.Playlists;
                     if (playlists.Count == 0)
@@ -196,8 +196,8 @@ namespace OOP4Spotivy.NewFolder
                         Console.WriteLine("Ongeldige keuze.");
                         continue;
                     }
-                    var gekozenPlaylist = playlists[playlistIndex - 1];
-                    var playables = gekozenPlaylist.ShowPlayables();
+                    var selectedPlaylist = playlists[playlistIndex - 1];
+                    var playables = selectedPlaylist.ShowPlayables();
                     if (playables.Count == 0)
                     {
                         Console.WriteLine("Deze afspeellijst bevat geen liedjes.");
@@ -208,10 +208,10 @@ namespace OOP4Spotivy.NewFolder
                     {
                         if (playables[i] is Song s)
                         {
-                            string artiesten = s.Artists != null && s.Artists.Count > 0
+                            string artists = s.Artists != null && s.Artists.Count > 0
                                 ? string.Join(", ", s.Artists.Select(a => a.Naam))
                                 : "Onbekend";
-                            Console.WriteLine($"{i + 1}. {s.Title} - Artiest(en): {artiesten}");
+                            Console.WriteLine($"{i + 1}. {s.Title} - Artiest(en): {artists}");
                         }
                         else
                         {
@@ -223,11 +223,11 @@ namespace OOP4Spotivy.NewFolder
                         Console.WriteLine("Ongeldige keuze.");
                         continue;
                     }
-                    var teVerwijderen = playables[songIndex - 1];
-                    gekozenPlaylist.Remove(teVerwijderen);
+                    var toRemove = playables[songIndex - 1];
+                    selectedPlaylist.Remove(toRemove);
                     Console.WriteLine("Liedje verwijderd uit de afspeellijst.");
                 }
-                else if (keuze == "4")
+                else if (choice == "4")
                 {
                     var playlists = client.ActiveUser.Playlists;
                     if (playlists.Count == 0)
@@ -243,8 +243,8 @@ namespace OOP4Spotivy.NewFolder
                         Console.WriteLine("Ongeldige keuze.");
                         continue;
                     }
-                    var gekozenPlaylist = playlists[playlistIndex - 1];
-                    var playables = gekozenPlaylist.ShowPlayables();
+                    var selectedPlaylist = playlists[playlistIndex - 1];
+                    var playables = selectedPlaylist.ShowPlayables();
                     if (playables.Count == 0)
                     {
                         Console.WriteLine("Deze afspeellijst bevat geen liedjes.");
@@ -255,10 +255,10 @@ namespace OOP4Spotivy.NewFolder
                     {
                         if (playables[i] is Song s)
                         {
-                            string artiesten = s.Artists != null && s.Artists.Count > 0
+                            string artists = s.Artists != null && s.Artists.Count > 0
                                 ? string.Join(", ", s.Artists.Select(a => a.Naam))
                                 : "Onbekend";
-                            Console.WriteLine($"{i + 1}. {s.Title} - Artiest(en): {artiesten}");
+                            Console.WriteLine($"{i + 1}. {s.Title} - Artiest(en): {artists}");
                         }
                         else
                         {
@@ -270,11 +270,11 @@ namespace OOP4Spotivy.NewFolder
                         Console.WriteLine("Ongeldige keuze.");
                         continue;
                     }
-                    var teSpelen = playables[songIndex - 1];
-                    client.CurrentlyPlaying = teSpelen;
-                    teSpelen.Play();
+                    var toPlay = playables[songIndex - 1];
+                    client.CurrentlyPlaying = toPlay;
+                    toPlay.Play();
                 }
-                else if (keuze == "5")
+                else if (choice == "5")
                 {
                     var playlists = client.ActiveUser.Playlists;
                     if (playlists.Count == 0)
@@ -290,7 +290,7 @@ namespace OOP4Spotivy.NewFolder
                         Console.WriteLine("Ongeldige keuze.");
                         continue;
                     }
-                    var gekozenPlaylist = playlists[playlistIndex - 1];
+                    var selectedPlaylist = playlists[playlistIndex - 1];
                     if (client.AllAlbums == null || client.AllAlbums.Count == 0)
                     {
                         Console.WriteLine("Er zijn geen albums beschikbaar.");
@@ -300,23 +300,23 @@ namespace OOP4Spotivy.NewFolder
                     for (int i = 0; i < client.AllAlbums.Count; i++)
                     {
                         var album = client.AllAlbums[i];
-                        string artiesten = album.Artists != null && album.Artists.Count > 0
+                        string artists = album.Artists != null && album.Artists.Count > 0
                             ? string.Join(", ", album.Artists.Select(a => a.Naam))
                             : "Onbekend";
-                        Console.WriteLine($"{i + 1}. {album.Title} - Artiest(en): {artiesten}");
+                        Console.WriteLine($"{i + 1}. {album.Title} - Artiest(en): {artists}");
                     }
                     if (!int.TryParse(Console.ReadLine(), out int albumIndex) || albumIndex < 1 || albumIndex > client.AllAlbums.Count)
                     {
                         Console.WriteLine("Ongeldige keuze.");
                         continue;
                     }
-                    var gekozenAlbum = client.AllAlbums[albumIndex - 1];
-                    var albumSongs = gekozenAlbum.ShowPlayables();
+                    var selectedAlbum = client.AllAlbums[albumIndex - 1];
+                    var albumSongs = selectedAlbum.ShowPlayables();
                     foreach (var playable in albumSongs)
-                        gekozenPlaylist.Add(playable);
-                    Console.WriteLine($"Alle liedjes van album '{gekozenAlbum.Title}' zijn toegevoegd aan afspeellijst '{gekozenPlaylist.Title}'.");
+                        selectedPlaylist.Add(playable);
+                    Console.WriteLine($"Alle liedjes van album '{selectedAlbum.Title}' zijn toegevoegd aan afspeellijst '{selectedPlaylist.Title}'.");
                 }
-                else if (keuze == "6")
+                else if (choice == "6")
                 {
                     if (client.AllSongs.Count == 0)
                     {
@@ -327,61 +327,61 @@ namespace OOP4Spotivy.NewFolder
                     for (int i = 0; i < client.AllSongs.Count; i++)
                     {
                         var song = client.AllSongs[i];
-                        string artiesten = song.Artists != null && song.Artists.Count > 0
+                        string artists = song.Artists != null && song.Artists.Count > 0
                             ? string.Join(", ", song.Artists.Select(a => a.Naam))
                             : "Onbekend";
-                        Console.WriteLine($"{i + 1}. {song.Title} - Artiest(en): {artiesten}");
+                        Console.WriteLine($"{i + 1}. {song.Title} - Artiest(en): {artists}");
                     }
                     if (!int.TryParse(Console.ReadLine(), out int songIndex) || songIndex < 1 || songIndex > client.AllSongs.Count)
                     {
                         Console.WriteLine("Ongeldige keuze.");
                         continue;
                     }
-                    var teSpelen = client.AllSongs[songIndex - 1];
-                    client.CurrentlyPlaying = teSpelen;
-                    teSpelen.Play();
+                    var toPlay = client.AllSongs[songIndex - 1];
+                    client.CurrentlyPlaying = toPlay;
+                    toPlay.Play();
                 }
-                else if (keuze == "7")
+                else if (choice == "7")
                 {
-                    if (client.CurrentlyPlaying is Song huidig)
+                    if (client.CurrentlyPlaying is Song current)
                     {
-                        string artiesten = huidig.Artists != null && huidig.Artists.Count > 0
-                            ? string.Join(", ", huidig.Artists.ConvertAll(a => a.Naam))
+                        string artists = current.Artists != null && current.Artists.Count > 0
+                            ? string.Join(", ", current.Artists.ConvertAll(a => a.Naam))
                             : "Onbekend";
-                        Console.WriteLine($"Speelt nu af: '{huidig.Title}' - Artiest(en): {artiesten} - Genre: {huidig.SongGenre} - Nog {huidig.Length} seconden");
+                        Console.WriteLine($"Speelt nu af: '{current.Title}' - Artiest(en): {artists} - Genre: {current.SongGenre} - Nog {current.Length} seconden");
                     }
                     else
                         Console.WriteLine("Er wordt momenteel geen nummer afgespeeld.");
                 }
-                else if (keuze == "8")
+                else if (choice == "8")
                 {
-                    if (client.CurrentlyPlaying is Song huidig)
-                        huidig.Pause();
+                    if (client.CurrentlyPlaying is Song current)
+                        current.Pause();
                     else
                         Console.WriteLine("Er wordt momenteel geen nummer afgespeeld.");
                 }
-                else if (keuze == "9")
+                else if (choice == "9")
                 {
-                    if (client.CurrentlyPlaying is Song huidig)
-                        huidig.Play();
+                    if (client.CurrentlyPlaying is Song current)
+                        current.Play();
                     else
                         Console.WriteLine("Er wordt momenteel geen nummer afgespeeld.");
                 }
-                else if (keuze == "10") // Wissel van gebruiker
+                else if (choice == "10") // Wissel van gebruiker
                 {
                     Console.WriteLine("\nKies een gebruiker om mee in te loggen:");
-                    for (int i = 0; i < gebruikers.Count; i++)
+                    for (int i = 0; i < users.Count; i++)
                     {
-                        Console.WriteLine($"{i + 1}. {gebruikers[i].Naam}");
+                        Console.WriteLine($"{i + 1}. {users[i].Naam}");
                     }
 
-                    if (!int.TryParse(Console.ReadLine(), out int userIndex) || userIndex < 1 || userIndex > gebruikers.Count)
+                    if (!int.TryParse(Console.ReadLine(), out int userIndex) || userIndex < 1 || userIndex > users.Count)
                     {
                         Console.WriteLine("Ongeldige keuze.");
                         continue;
                     }
 
-                    var selectedUser = gebruikers[userIndex - 1] as SuperUser;
+                    var selectedUser = users[userIndex - 1] as SuperUser;
                     if (selectedUser != null)
                     {
                         client.ActiveUser = selectedUser;
@@ -392,7 +392,7 @@ namespace OOP4Spotivy.NewFolder
                         Console.WriteLine("De geselecteerde gebruiker is geen SuperUser.");
                     }
                 }
-                else if (keuze == "11")
+                else if (choice == "11")
                 {
                     var playlists = client.ActiveUser.Playlists;
                     if (playlists.Count == 0)
@@ -410,10 +410,10 @@ namespace OOP4Spotivy.NewFolder
                         Console.WriteLine("Ongeldige keuze.");
                         continue;
                     }
-                    var gekozenPlaylist = playlists[playlistIndex - 1];
+                    var selectedPlaylist = playlists[playlistIndex - 1];
 
                     // Controleer of de afspeellijst items bevat
-                    var playables = gekozenPlaylist.ShowPlayables();
+                    var playables = selectedPlaylist.ShowPlayables();
                     if (playables.Count == 0)
                     {
                         Console.WriteLine("Deze afspeellijst bevat geen liedjes.");
@@ -422,27 +422,27 @@ namespace OOP4Spotivy.NewFolder
 
                     Console.WriteLine("1. Speel op volgorde af");
                     Console.WriteLine("2. Speel in willekeurige volgorde af");
-                    var subkeuze = Console.ReadLine();
+                    var subChoice = Console.ReadLine();
 
                     // Bepaal de afspeellijst (normaal of shuffled)
-                    List<iPlayable> afspeellijst;
-                    if (subkeuze == "1")
+                    List<iPlayable> playList;
+                    if (subChoice == "1")
                     {
-                        afspeellijst = playables;
+                        playList = playables;
                         Console.WriteLine("Normale afspeelvolgorde:");
                     }
-                    else if (subkeuze == "2")
+                    else if (subChoice == "2")
                     {
-                        afspeellijst = new List<iPlayable>(playables);
+                        playList = new List<iPlayable>(playables);
                         var rnd = new Random();
-                        int n = afspeellijst.Count;
+                        int n = playList.Count;
 
                         // Fisher-Yates shuffle algoritme
                         while (n > 1)
                         {
                             n--;
                             int k = rnd.Next(n + 1);
-                            (afspeellijst[n], afspeellijst[k]) = (afspeellijst[k], afspeellijst[n]);
+                            (playList[n], playList[k]) = (playList[k], playList[n]);
                         }
                         Console.WriteLine("Willekeurige afspeelvolgorde:");
                     }
@@ -453,12 +453,12 @@ namespace OOP4Spotivy.NewFolder
                     }
 
                     // Toon de afspeelvolgorde
-                    for (int i = 0; i < afspeellijst.Count; i++)
+                    for (int i = 0; i < playList.Count; i++)
                     {
-                        if (afspeellijst[i] is Song s)
+                        if (playList[i] is Song s)
                             Console.WriteLine($"{i + 1}. {s.Title} - {string.Join(", ", s.Artists.Select(a => a.Naam))}");
                         else
-                            Console.WriteLine($"{i + 1}. {afspeellijst[i]}");
+                            Console.WriteLine($"{i + 1}. {playList[i]}");
                     }
 
                     // Start het afspelen
@@ -466,21 +466,21 @@ namespace OOP4Spotivy.NewFolder
                     bool stop = false;
                     bool isPaused = false;
 
-                    while (!stop && afspeellijst.Count > 0 && currentIndex < afspeellijst.Count)
+                    while (!stop && playList.Count > 0 && currentIndex < playList.Count)
                     {
-                        var huidig = afspeellijst[currentIndex];
-                        client.CurrentlyPlaying = huidig;
+                        var current = playList[currentIndex];
+                        client.CurrentlyPlaying = current;
 
                         // Toon duidelijke informatie over het huidige nummer en waar we zijn in de afspeellijst
                         Console.WriteLine("\n---------------------------------------------------");
-                        Console.WriteLine($"HUIDIGE POSITIE: {currentIndex + 1} van {afspeellijst.Count}");
+                        Console.WriteLine($"HUIDIGE POSITIE: {currentIndex + 1} van {playList.Count}");
 
-                        if (huidig is Song s)
+                        if (current is Song s)
                         {
-                            string artiesten = string.Join(", ", s.Artists.Select(a => a.Naam));
-                            Console.WriteLine($"NU SPEELT: '{s.Title}' - Artiest(en): {artiesten} - Genre: {s.SongGenre} - Duur: {s.Length} sec");
+                            string artists = string.Join(", ", s.Artists.Select(a => a.Naam));
+                            Console.WriteLine($"NU SPEELT: '{s.Title}' - Artiest(en): {artists} - Genre: {s.SongGenre} - Duur: {s.Length} sec");
 
-                            if (currentIndex < afspeellijst.Count - 1 && afspeellijst[currentIndex + 1] is Song nextSong)
+                            if (currentIndex < playList.Count - 1 && playList[currentIndex + 1] is Song nextSong)
                             {
                                 string nextArtists = string.Join(", ", nextSong.Artists.Select(a => a.Naam));
                                 Console.WriteLine($"VOLGENDE: '{nextSong.Title}' - {nextArtists}");
@@ -488,14 +488,14 @@ namespace OOP4Spotivy.NewFolder
                         }
                         else
                         {
-                            Console.WriteLine($"NU SPEELT: {huidig}");
+                            Console.WriteLine($"NU SPEELT: {current}");
                         }
                         Console.WriteLine("---------------------------------------------------");
 
                         // Speel het nummer af als niet gepauzeerd
                         if (!isPaused)
                         {
-                            huidig.Play();
+                            current.Play();
                         }
 
                         // Toon besturingsknoppen
@@ -506,12 +506,12 @@ namespace OOP4Spotivy.NewFolder
                         Console.WriteLine("4. Verder spelen");
                         Console.WriteLine("5. Stoppen");
                         Console.Write("Kies een optie: ");
-                        var afspeelKeuze = Console.ReadLine();
+                        var playChoice = Console.ReadLine();
 
-                        switch (afspeelKeuze)
+                        switch (playChoice)
                         {
                             case "1":
-                                if (currentIndex < afspeellijst.Count - 1)
+                                if (currentIndex < playList.Count - 1)
                                 {
                                     currentIndex++;
                                     isPaused = false;
@@ -534,14 +534,14 @@ namespace OOP4Spotivy.NewFolder
                                 }
                                 break;
                             case "3":
-                                if (huidig is Song song)
+                                if (current is Song song)
                                 {
                                     song.Pause();
                                     isPaused = true;
                                 }
                                 break;
                             case "4":
-                                if (huidig is Song currentSong)
+                                if (current is Song currentSong)
                                 {
                                     currentSong.Play();
                                     isPaused = false;
@@ -556,7 +556,7 @@ namespace OOP4Spotivy.NewFolder
                         }
                     }
                 }
-                else if (keuze == "12")
+                else if (choice == "12")
                 {
                     if (client.AllAlbums == null || client.AllAlbums.Count == 0)
                     {
@@ -567,18 +567,18 @@ namespace OOP4Spotivy.NewFolder
                     for (int i = 0; i < client.AllAlbums.Count; i++)
                     {
                         var album = client.AllAlbums[i];
-                        string artiesten = album.Artists != null && album.Artists.Count > 0
+                        string artists = album.Artists != null && album.Artists.Count > 0
                             ? string.Join(", ", album.Artists.Select(a => a.Naam))
                             : "Onbekend";
-                        Console.WriteLine($"{i + 1}. {album.Title} - Artiest(en): {artiesten}");
+                        Console.WriteLine($"{i + 1}. {album.Title} - Artiest(en): {artists}");
                     }
                     if (!int.TryParse(Console.ReadLine(), out int albumIndex) || albumIndex < 1 || albumIndex > client.AllAlbums.Count)
                     {
                         Console.WriteLine("Ongeldige keuze.");
                         continue;
                     }
-                    var gekozenAlbum = client.AllAlbums[albumIndex - 1];
-                    var playables = gekozenAlbum.ShowPlayables();
+                    var selectedAlbum = client.AllAlbums[albumIndex - 1];
+                    var playables = selectedAlbum.ShowPlayables();
                     if (playables.Count == 0)
                     {
                         Console.WriteLine("Dit album bevat geen liedjes.");
@@ -587,24 +587,24 @@ namespace OOP4Spotivy.NewFolder
 
                     Console.WriteLine("1. Speel op volgorde af");
                     Console.WriteLine("2. Speel in willekeurige volgorde af");
-                    var subkeuze = Console.ReadLine();
+                    var subChoice = Console.ReadLine();
 
-                    List<iPlayable> afspeellijst;
-                    if (subkeuze == "1")
+                    List<iPlayable> playList;
+                    if (subChoice == "1")
                     {
-                        afspeellijst = playables;
+                        playList = playables;
                         Console.WriteLine("Normale afspeelvolgorde:");
                     }
-                    else if (subkeuze == "2")
+                    else if (subChoice == "2")
                     {
-                        afspeellijst = new List<iPlayable>(playables);
+                        playList = new List<iPlayable>(playables);
                         var rnd = new Random();
-                        int n = afspeellijst.Count;
+                        int n = playList.Count;
                         while (n > 1)
                         {
                             n--;
                             int k = rnd.Next(n + 1);
-                            (afspeellijst[n], afspeellijst[k]) = (afspeellijst[k], afspeellijst[n]);
+                            (playList[n], playList[k]) = (playList[k], playList[n]);
                         }
                         Console.WriteLine("Willekeurige afspeelvolgorde:");
                     }
@@ -614,32 +614,32 @@ namespace OOP4Spotivy.NewFolder
                         continue;
                     }
 
-                    for (int i = 0; i < afspeellijst.Count; i++)
+                    for (int i = 0; i < playList.Count; i++)
                     {
-                        if (afspeellijst[i] is Song s)
+                        if (playList[i] is Song s)
                             Console.WriteLine($"{i + 1}. {s.Title} - {string.Join(", ", s.Artists.Select(a => a.Naam))}");
                         else
-                            Console.WriteLine($"{i + 1}. {afspeellijst[i]}");
+                            Console.WriteLine($"{i + 1}. {playList[i]}");
                     }
 
                     int currentIndex = 0;
                     bool stop = false;
                     bool isPaused = false;
 
-                    while (!stop && afspeellijst.Count > 0 && currentIndex < afspeellijst.Count)
+                    while (!stop && playList.Count > 0 && currentIndex < playList.Count)
                     {
-                        var huidig = afspeellijst[currentIndex];
-                        client.CurrentlyPlaying = huidig;
+                        var current = playList[currentIndex];
+                        client.CurrentlyPlaying = current;
 
                         Console.WriteLine("\n--------------------------------------------------");
-                        Console.WriteLine($"HUIDIGE POSITIE: {currentIndex + 1} van {afspeellijst.Count}");
+                        Console.WriteLine($"HUIDIGE POSITIE: {currentIndex + 1} van {playList.Count}");
 
-                        if (huidig is Song s)
+                        if (current is Song s)
                         {
-                            string artiesten = string.Join(", ", s.Artists.Select(a => a.Naam));
-                            Console.WriteLine($"NU SPEELT: '{s.Title}' - Artiest(en): {artiesten} - Genre: {s.SongGenre} - Duur: {s.Length} sec");
+                            string artists = string.Join(", ", s.Artists.Select(a => a.Naam));
+                            Console.WriteLine($"NU SPEELT: '{s.Title}' - Artiest(en): {artists} - Genre: {s.SongGenre} - Duur: {s.Length} sec");
 
-                            if (currentIndex < afspeellijst.Count - 1 && afspeellijst[currentIndex + 1] is Song nextSong)
+                            if (currentIndex < playList.Count - 1 && playList[currentIndex + 1] is Song nextSong)
                             {
                                 string nextArtists = string.Join(", ", nextSong.Artists.Select(a => a.Naam));
                                 Console.WriteLine($"VOLGENDE: '{nextSong.Title}' - {nextArtists}");
@@ -647,13 +647,13 @@ namespace OOP4Spotivy.NewFolder
                         }
                         else
                         {
-                            Console.WriteLine($"NU SPEELT: {huidig}");
+                            Console.WriteLine($"NU SPEELT: {current}");
                         }
                         Console.WriteLine("--------------------------------------------------");
 
                         if (!isPaused)
                         {
-                            huidig.Play();
+                            current.Play();
                         }
 
                         Console.WriteLine("\nBediening:");
@@ -663,12 +663,12 @@ namespace OOP4Spotivy.NewFolder
                         Console.WriteLine("4. Verder spelen");
                         Console.WriteLine("5. Stoppen");
                         Console.Write("Kies een optie: ");
-                        var afspeelKeuze = Console.ReadLine();
+                        var playChoice = Console.ReadLine();
 
-                        switch (afspeelKeuze)
+                        switch (playChoice)
                         {
                             case "1":
-                                if (currentIndex < afspeellijst.Count - 1)
+                                if (currentIndex < playList.Count - 1)
                                 {
                                     currentIndex++;
                                     isPaused = false;
@@ -691,14 +691,14 @@ namespace OOP4Spotivy.NewFolder
                                 }
                                 break;
                             case "3":
-                                if (huidig is Song song)
+                                if (current is Song song)
                                 {
                                     song.Pause();
                                     isPaused = true;
                                 }
                                 break;
                             case "4":
-                                if (huidig is Song currentSong)
+                                if (current is Song currentSong)
                                 {
                                     currentSong.Play();
                                     isPaused = false;
@@ -713,7 +713,7 @@ namespace OOP4Spotivy.NewFolder
                         }
                     }
                 }
-                else if (keuze == "13") // Nieuwe optie: Vrienden beheren
+                else if (choice == "13") // Nieuwe optie: Vrienden beheren
                 {
                     Console.WriteLine("\n===== VRIENDEN BEHEREN =====");
                     Console.WriteLine("1. Toon mijn vrienden");
@@ -727,60 +727,60 @@ namespace OOP4Spotivy.NewFolder
                     Console.WriteLine("0. Terug naar hoofdmenu");
                     Console.Write("Kies een optie: ");
 
-                    var vriendenKeuze = Console.ReadLine();
+                    var friendChoice = Console.ReadLine();
 
                     // 1. Toon mijn vrienden
-                    if (vriendenKeuze == "1")
+                    if (friendChoice == "1")
                     {
-                        var vrienden = client.ActiveUser.Friends;
-                        if (vrienden.Count == 0)
+                        var friends = client.ActiveUser.Friends;
+                        if (friends.Count == 0)
                         {
                             Console.WriteLine("Je hebt nog geen vrienden.");
                             continue;
                         }
 
                         Console.WriteLine("\nJouw vrienden:");
-                        for (int i = 0; i < vrienden.Count; i++)
+                        for (int i = 0; i < friends.Count; i++)
                         {
-                            Console.WriteLine($"{i + 1}. {vrienden[i].Naam}");
+                            Console.WriteLine($"{i + 1}. {friends[i].Naam}");
                         }
                     }
 
                     // 2. Vriendschapsverzoek sturen
-                    else if (vriendenKeuze == "2")
+                    else if (friendChoice == "2")
                     {
                         // Toon alle gebruikers behalve jezelf
-                        var potentieleVrienden = gebruikers.Where(g => g.Naam != client.ActiveUser.Naam).ToList();
+                        var potentialFriends = users.Where(g => g.Naam != client.ActiveUser.Naam).ToList();
 
-                        if (potentieleVrienden.Count == 0)
+                        if (potentialFriends.Count == 0)
                         {
                             Console.WriteLine("Er zijn geen andere gebruikers om vriendschapsverzoeken naar te sturen.");
                             continue;
                         }
 
                         Console.WriteLine("\nKies een gebruiker om een vriendschapsverzoek naar te sturen:");
-                        for (int i = 0; i < potentieleVrienden.Count; i++)
+                        for (int i = 0; i < potentialFriends.Count; i++)
                         {
-                            var isAlreadyFriend = client.ActiveUser.Friends.Any(f => f.Naam == potentieleVrienden[i].Naam);
+                            var isAlreadyFriend = client.ActiveUser.Friends.Any(f => f.Naam == potentialFriends[i].Naam);
                             var status = isAlreadyFriend ? " (Al vriend)" : "";
 
                             // Controleer of er al een verzoek is gestuurd naar deze gebruiker
-                            var hasPendingRequest = friendRequests[potentieleVrienden[i].Naam].Any(p => p.Naam == client.ActiveUser.Naam);
+                            var hasPendingRequest = friendRequests[potentialFriends[i].Naam].Any(p => p.Naam == client.ActiveUser.Naam);
                             if (hasPendingRequest)
                             {
                                 status = " (Verzoek verstuurd)";
                             }
 
-                            Console.WriteLine($"{i + 1}. {potentieleVrienden[i].Naam}{status}");
+                            Console.WriteLine($"{i + 1}. {potentialFriends[i].Naam}{status}");
                         }
 
-                        if (!int.TryParse(Console.ReadLine(), out int friendIndex) || friendIndex < 1 || friendIndex > potentieleVrienden.Count)
+                        if (!int.TryParse(Console.ReadLine(), out int friendIndex) || friendIndex < 1 || friendIndex > potentialFriends.Count)
                         {
                             Console.WriteLine("Ongeldige keuze.");
                             continue;
                         }
 
-                        var selectedFriend = potentieleVrienden[friendIndex - 1];
+                        var selectedFriend = potentialFriends[friendIndex - 1];
 
                         // Controleer of deze persoon al een vriend is
                         if (client.ActiveUser.Friends.Any(f => f.Naam == selectedFriend.Naam))
@@ -802,7 +802,7 @@ namespace OOP4Spotivy.NewFolder
                     }
 
                     // 3. Vriendschapsverzoeken bekijken
-                    else if (vriendenKeuze == "3")
+                    else if (friendChoice == "3")
                     {
                         var currentRequests = friendRequests[client.ActiveUser.Naam];
 
@@ -820,7 +820,7 @@ namespace OOP4Spotivy.NewFolder
                     }
 
                     // 4. Vriendschapsverzoek accepteren
-                    else if (vriendenKeuze == "4")
+                    else if (friendChoice == "4")
                     {
                         var currentRequests = friendRequests[client.ActiveUser.Naam];
 
@@ -855,7 +855,7 @@ namespace OOP4Spotivy.NewFolder
                     }
 
                     // 5. Vriendschapsverzoek weigeren
-                    else if (vriendenKeuze == "5")
+                    else if (friendChoice == "5")
                     {
                         var currentRequests = friendRequests[client.ActiveUser.Naam];
 
@@ -886,29 +886,29 @@ namespace OOP4Spotivy.NewFolder
                     }
 
                     // 6. Verwijder een vriend
-                    else if (vriendenKeuze == "6")
+                    else if (friendChoice == "6")
                     {
-                        var vrienden = client.ActiveUser.Friends;
+                        var friends = client.ActiveUser.Friends;
 
-                        if (vrienden.Count == 0)
+                        if (friends.Count == 0)
                         {
                             Console.WriteLine("Je hebt nog geen vrienden om te verwijderen.");
                             continue;
                         }
 
                         Console.WriteLine("\nKies een vriend om te verwijderen:");
-                        for (int i = 0; i < vrienden.Count; i++)
+                        for (int i = 0; i < friends.Count; i++)
                         {
-                            Console.WriteLine($"{i + 1}. {vrienden[i].Naam}");
+                            Console.WriteLine($"{i + 1}. {friends[i].Naam}");
                         }
 
-                        if (!int.TryParse(Console.ReadLine(), out int friendIndex) || friendIndex < 1 || friendIndex > vrienden.Count)
+                        if (!int.TryParse(Console.ReadLine(), out int friendIndex) || friendIndex < 1 || friendIndex > friends.Count)
                         {
                             Console.WriteLine("Ongeldige keuze.");
                             continue;
                         }
 
-                        var selectedFriend = vrienden[friendIndex - 1];
+                        var selectedFriend = friends[friendIndex - 1];
 
                         // Wederzijds vriendschappen verwijderen
                         client.ActiveUser.Friends.Remove(selectedFriend);
@@ -917,37 +917,37 @@ namespace OOP4Spotivy.NewFolder
                         Console.WriteLine($"Je bent niet meer bevriend met {selectedFriend.Naam}.");
                     }
                     // 7. Bekijk speellijsten van een vriend
-                    else if (vriendenKeuze == "7")
+                    else if (friendChoice == "7")
                     {
-                        var vrienden = client.ActiveUser.Friends;
-                        if (vrienden.Count == 0)
+                        var friends = client.ActiveUser.Friends;
+                        if (friends.Count == 0)
                         {
                             Console.WriteLine("Je hebt nog geen vrienden.");
                             continue;
                         }
 
                         Console.WriteLine("\nKies een vriend om diens speellijsten te bekijken:");
-                        for (int i = 0; i < vrienden.Count; i++)
+                        for (int i = 0; i < friends.Count; i++)
                         {
-                            Console.WriteLine($"{i + 1}. {vrienden[i].Naam}");
+                            Console.WriteLine($"{i + 1}. {friends[i].Naam}");
                         }
 
-                        if (!int.TryParse(Console.ReadLine(), out int vriendIndex) || vriendIndex < 1 || vriendIndex > vrienden.Count)
+                        if (!int.TryParse(Console.ReadLine(), out int friendIndex) || friendIndex < 1 || friendIndex > friends.Count)
                         {
                             Console.WriteLine("Ongeldige keuze.");
                             continue;
                         }
 
-                        var gekozenVriend = vrienden[vriendIndex - 1];
-                        var playlists = gekozenVriend.Playlists;
+                        var selectedFriend = friends[friendIndex - 1];
+                        var playlists = selectedFriend.Playlists;
 
                         if (playlists.Count == 0)
                         {
-                            Console.WriteLine($"{gekozenVriend.Naam} heeft geen speellijsten.");
+                            Console.WriteLine($"{selectedFriend.Naam} heeft geen speellijsten.");
                             continue;
                         }
 
-                        Console.WriteLine($"\nSpeellijsten van {gekozenVriend.Naam}:");
+                        Console.WriteLine($"\nSpeellijsten van {selectedFriend.Naam}:");
                         for (int i = 0; i < playlists.Count; i++)
                         {
                             Console.WriteLine($"{i + 1}. {playlists[i].Title}");
@@ -960,8 +960,8 @@ namespace OOP4Spotivy.NewFolder
                             continue;
                         }
 
-                        var gekozenPlaylist = playlists[playlistIndex - 1];
-                        var playables = gekozenPlaylist.ShowPlayables();
+                        var selectedPlaylist = playlists[playlistIndex - 1];
+                        var playables = selectedPlaylist.ShowPlayables();
 
                         if (playables.Count == 0)
                         {
@@ -969,15 +969,15 @@ namespace OOP4Spotivy.NewFolder
                             continue;
                         }
 
-                        Console.WriteLine($"\nNummers in '{gekozenPlaylist.Title}':");
+                        Console.WriteLine($"\nNummers in '{selectedPlaylist.Title}':");
                         for (int i = 0; i < playables.Count; i++)
                         {
                             if (playables[i] is Song s)
                             {
-                                string artiesten = s.Artists != null && s.Artists.Count > 0
+                                string artists = s.Artists != null && s.Artists.Count > 0
                                     ? string.Join(", ", s.Artists.Select(a => a.Naam))
                                     : "Onbekend";
-                                Console.WriteLine($"{i + 1}. {s.Title} - Artiest(en): {artiesten}");
+                                Console.WriteLine($"{i + 1}. {s.Title} - Artiest(en): {artists}");
                             }
                             else
                             {
@@ -986,96 +986,96 @@ namespace OOP4Spotivy.NewFolder
                         }
                     }
                     // 8. Vergelijk een speellijst met die van een vriend
-                    else if (vriendenKeuze == "8")
+                    else if (friendChoice == "8")
                     {
-                        var vrienden = client.ActiveUser.Friends;
-                        if (vrienden.Count == 0)
+                        var friends = client.ActiveUser.Friends;
+                        if (friends.Count == 0)
                         {
                             Console.WriteLine("Je hebt nog geen vrienden.");
                             continue;
                         }
 
                         Console.WriteLine("\nKies een vriend om mee te vergelijken:");
-                        for (int i = 0; i < vrienden.Count; i++)
+                        for (int i = 0; i < friends.Count; i++)
                         {
-                            Console.WriteLine($"{i + 1}. {vrienden[i].Naam}");
+                            Console.WriteLine($"{i + 1}. {friends[i].Naam}");
                         }
 
-                        if (!int.TryParse(Console.ReadLine(), out int vriendIndex) || vriendIndex < 1 || vriendIndex > vrienden.Count)
+                        if (!int.TryParse(Console.ReadLine(), out int friendIndex) || friendIndex < 1 || friendIndex > friends.Count)
                         {
                             Console.WriteLine("Ongeldige keuze.");
                             continue;
                         }
 
-                        var gekozenVriend = vrienden[vriendIndex - 1];
-                        var vriendPlaylists = gekozenVriend.Playlists;
-                        if (vriendPlaylists.Count == 0)
+                        var selectedFriend = friends[friendIndex - 1];
+                        var friendPlaylists = selectedFriend.Playlists;
+                        if (friendPlaylists.Count == 0)
                         {
-                            Console.WriteLine($"{gekozenVriend.Naam} heeft geen speellijsten.");
+                            Console.WriteLine($"{selectedFriend.Naam} heeft geen speellijsten.");
                             continue;
                         }
 
-                        Console.WriteLine($"\nSpeellijsten van {gekozenVriend.Naam}:");
-                        for (int i = 0; i < vriendPlaylists.Count; i++)
+                        Console.WriteLine($"\nSpeellijsten van {selectedFriend.Naam}:");
+                        for (int i = 0; i < friendPlaylists.Count; i++)
                         {
-                            Console.WriteLine($"{i + 1}. {vriendPlaylists[i].Title}");
+                            Console.WriteLine($"{i + 1}. {friendPlaylists[i].Title}");
                         }
                         Console.Write("Kies een speellijst van je vriend: ");
-                        if (!int.TryParse(Console.ReadLine(), out int vriendPlaylistIndex) || vriendPlaylistIndex < 1 || vriendPlaylistIndex > vriendPlaylists.Count)
+                        if (!int.TryParse(Console.ReadLine(), out int friendPlaylistIndex) || friendPlaylistIndex < 1 || friendPlaylistIndex > friendPlaylists.Count)
                         {
                             Console.WriteLine("Ongeldige keuze.");
                             continue;
                         }
-                        var vriendPlaylist = vriendPlaylists[vriendPlaylistIndex - 1];
-                        var vriendSongs = vriendPlaylist.ShowPlayables().OfType<Song>().ToList();
-                        if (vriendSongs.Count == 0)
+                        var friendPlaylist = friendPlaylists[friendPlaylistIndex - 1];
+                        var friendSongs = friendPlaylist.ShowPlayables().OfType<Song>().ToList();
+                        if (friendSongs.Count == 0)
                         {
                             Console.WriteLine("Deze speellijst bevat geen nummers.");
                             continue;
                         }
 
                         // Kies eigen speellijst
-                        var mijnPlaylists = client.ActiveUser.Playlists;
-                        if (mijnPlaylists.Count == 0)
+                        var myPlaylists = client.ActiveUser.Playlists;
+                        if (myPlaylists.Count == 0)
                         {
                             Console.WriteLine("Je hebt zelf geen speellijsten.");
                             continue;
                         }
                         Console.WriteLine("\nJouw speellijsten:");
-                        for (int i = 0; i < mijnPlaylists.Count; i++)
+                        for (int i = 0; i < myPlaylists.Count; i++)
                         {
-                            Console.WriteLine($"{i + 1}. {mijnPlaylists[i].Title}");
+                            Console.WriteLine($"{i + 1}. {myPlaylists[i].Title}");
                         }
                         Console.Write("Kies een van je eigen speellijsten: ");
-                        if (!int.TryParse(Console.ReadLine(), out int mijnPlaylistIndex) || mijnPlaylistIndex < 1 || mijnPlaylistIndex > mijnPlaylists.Count)
+                        if (!int.TryParse(Console.ReadLine(), out int myPlaylistIndex) || myPlaylistIndex < 1 || myPlaylistIndex > myPlaylists.Count)
                         {
                             Console.WriteLine("Ongeldige keuze.");
                             continue;
                         }
-                        var mijnPlaylist = mijnPlaylists[mijnPlaylistIndex - 1];
-                        var mijnSongs = mijnPlaylist.ShowPlayables().OfType<Song>().ToList();
-                        if (mijnSongs.Count == 0)
+                        var myPlaylist = myPlaylists[myPlaylistIndex - 1];
+                        var mySongs = myPlaylist.ShowPlayables().OfType<Song>().ToList();
+                        if (mySongs.Count == 0)
                         {
                             Console.WriteLine("Jouw speellijst bevat geen nummers.");
                             continue;
                         }
 
                         // Vergelijk op basis van titel en artiesten
-                        var overeenkomend = mijnSongs.Where(ms =>
-                            vriendSongs.Any(vs =>
+                        var matching = mySongs.Where(ms =>
+                            friendSongs.Any(vs =>
                                 string.Equals(ms.Title, vs.Title, StringComparison.OrdinalIgnoreCase) &&
                                 ms.Artists.Count == vs.Artists.Count &&
                                 ms.Artists.All(a => vs.Artists.Any(va => va.Naam == a.Naam))
                             )).ToList();
 
-                        Console.WriteLine($"\nAantal overeenkomende nummers: {overeenkomend.Count}");
-                        if (overeenkomend.Count > 0)
+                        Console.WriteLine($"\nAantal overeenkomende nummers: {matching.Count}");
+                        if (matching.Count > 0)
                         {
                             Console.WriteLine("Overeenkomende nummers:");
-                            foreach (var song in overeenkomend)
+                            foreach (var song in matching)
                             {
-                                string artiesten = string.Join(", ", song.Artists.Select(a => a.Naam));
-                                Console.WriteLine($"- {song.Title} - {artiesten}");
+                                string artists = string.Join(", ", song.Artists.Select(a => a.Naam));
+                                Console.WriteLine($"- {song.Title} - {artists}");
                             }
                         }
                         else
@@ -1085,7 +1085,7 @@ namespace OOP4Spotivy.NewFolder
                     }
 
                     // 0. Terug naar hoofdmenu
-                    else if (vriendenKeuze == "0")
+                    else if (friendChoice == "0")
                     {
                         continue;
                     }
@@ -1094,7 +1094,7 @@ namespace OOP4Spotivy.NewFolder
                         Console.WriteLine("Ongeldige keuze, probeer opnieuw.");
                     }
                 }
-                else if (keuze == "0")
+                else if (choice == "0")
                 {
                     Console.WriteLine("Bedankt voor het gebruiken van Spotivy. Tot ziens!");
                     break;
