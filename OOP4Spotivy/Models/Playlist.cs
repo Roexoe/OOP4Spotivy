@@ -26,13 +26,9 @@ public class Playlist : SongCollection
             Console.WriteLine("Deze afspeellijst bevat geen liedjes.");
             return;
         }
-        for (int i = 0; i < playables.Count; i++)
-        {
-            Console.WriteLine($"Nu aan het afspelen: {playables[i]}");
-            playables[i].Play();
-            // Stop na het eerste nummer, zodat bediening via menu kan
-            break;
-        }
+        Console.WriteLine($"Nu aan het afspelen: {playables[0]}");
+        playables[0].Play();
+        // Stop na het eerste nummer, zodat bediening via menu kan
     }
 
     public void PlayShuffled()
@@ -55,6 +51,7 @@ public class Playlist : SongCollection
         shuffled[0].Play();
         // Stop na het eerste nummer, zodat bediening via menu kan
     }
+
 
     public override string ToString() => $"{Title} (Owner: {Owner.Naam}, {playables.Count} items)";
 }

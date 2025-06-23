@@ -27,7 +27,7 @@ public class Person
     {
         if (index >= 0 && index < Playlists.Count)
             return Playlists[index];
-        return null;
+        return new Playlist(this, "Default Playlist"); // Return a non-null default value
     }
 
     public Playlist CreatePlaylist(string title)
