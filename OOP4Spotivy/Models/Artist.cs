@@ -9,15 +9,21 @@ public class Artist
     public Artist(string naam, List<Album> albums)
     {
         Naam = naam;
-        Albums = albums ?? new List<Album>();
+        Albums = albums;
         Songs = new List<Song>();
     }
 
+    /// <summary>
+    /// Adds a song to the artist's list of songs.
+    /// </summary>
     public void AddSong(Song song)
     {
         Songs.Add(song);
     }
 
+    /// <summary>
+    /// Adds an album to the artist's list of albums.
+    /// </summary>
     public void AddAlbum(Album album)
     {
         Albums.Add(album);
