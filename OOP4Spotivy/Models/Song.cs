@@ -25,6 +25,9 @@ public class Song : iPlayable
         _isPlaying = false;
     }
 
+    /// <summary>
+    /// Starts or resumes playback of the song. If already playing, resumes if paused.
+    /// </summary>
     public void Play()
     {
         if (_isPlaying)
@@ -71,6 +74,9 @@ public class Song : iPlayable
         _playThread.Start();
     }
 
+    /// <summary>
+    /// Pauses playback of the song if it is currently playing.
+    /// </summary>
     public void Pause()
     {
         if (_isPlaying && !_isPaused && _remainingTime > 0)
@@ -88,7 +94,14 @@ public class Song : iPlayable
         }
     }
 
+    /// <summary>
+    /// Skips to the next song. (Not implemented.)
+    /// </summary>
     public void Next() { }
+
+    /// <summary>
+    /// Stops playback and resets the song to the beginning.
+    /// </summary>
     public void Stop()
     {
         _isPaused = false;
@@ -104,3 +117,4 @@ public class Song : iPlayable
         return Title;
     }
 }
+

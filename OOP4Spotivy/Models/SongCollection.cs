@@ -16,6 +16,9 @@ public class SongCollection
         return Title;
     }
 
+    /// <summary>
+    /// Returns the list of playables in this collection.
+    /// </summary>
     public List<iPlayable> ShowPlayables()
     {
         return playables;
