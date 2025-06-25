@@ -52,7 +52,7 @@ public class Playlist : SongCollection
             Console.WriteLine("Deze afspeellijst bevat geen liedjes.");
             return;
         }
-        var rnd = new System.Random();
+        var rnd = new Random();
         var shuffled = new List<iPlayable>(playables);
         int n = shuffled.Count;
         while (n > 1)
@@ -66,9 +66,11 @@ public class Playlist : SongCollection
         // Stop na het eerste nummer, zodat bediening via menu kan
     }
 
-
-    public override string ToString() => $"{Title} (Owner: {Owner.Naam}, {playables.Count} items)";
-
+    /// <summary>
+    /// Speelt de hele afspeellijst af in een aparte thread, met repeat-optie.
+    /// </summary>
+    public void PlayAllWithRepeat()
+    {
         Thread playlistThread = new Thread(() =>
         {
             do
@@ -79,7 +81,7 @@ public class Playlist : SongCollection
                     {
                         song.Stop(); // Reset song state
                         song.Play();
-                        // Wait until the song is finished
+                        // Wacht tot het nummer klaar is
                         while (song.Length > 0)
                         {
                             Thread.Sleep(500);
@@ -96,3 +98,4 @@ public class Playlist : SongCollection
         playlistThread.IsBackground = true;
         playlistThread.Start();
     }
+}
