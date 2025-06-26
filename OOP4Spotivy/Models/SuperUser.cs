@@ -1,6 +1,6 @@
 public class SuperUser : Person
 {
-    public SuperUser(string naam) : base(naam) { }
+    public SuperUser(string Name) : base(Name) { }
 
     public void AddFriend(Person person) { }
     public void RemoveFriend(Person person) { }
