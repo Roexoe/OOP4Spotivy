@@ -28,7 +28,7 @@ public class Playlist : SongCollection
         playables.Remove(playable);
     }
 
-    public override string ToString() => $"{Title} (Owner: {Owner.Naam}, {playables.Count} items)";
+    public override string ToString() => $"{Title} (Owner: {Owner.Name}, {playables.Count} items)";
 
     /// <summary>
     /// Plays all songs in the playlist in order. If Repeat is true, repeats the playlist.

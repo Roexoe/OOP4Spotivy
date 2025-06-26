@@ -21,7 +21,7 @@ namespace OOP4Spotivy.NewFolder
             var friendRequests = new Dictionary<string, List<Person>>();
             foreach (var user in users)
             {
-                friendRequests[user.Naam] = new List<Person>();
+                friendRequests[user.Name] = new List<Person>();
             }
 
             // Voorbeeldartiesten
@@ -112,7 +112,7 @@ namespace OOP4Spotivy.NewFolder
             while (true)
             {
                 Console.WriteLine("\n===== SPOTIVY MENU =====");
-                Console.WriteLine($"Ingelogde gebruiker: {client.ActiveUser.Naam}");
+                Console.WriteLine($"Ingelogde gebruiker: {client.ActiveUser.Name}");
                 Console.WriteLine("1. Maak een nieuwe afspeellijst aan");
                 Console.WriteLine("2. Voeg een liedje toe aan een afspeellijst");
                 Console.WriteLine("3. Verwijder een liedje uit een afspeellijst");
@@ -132,12 +132,12 @@ namespace OOP4Spotivy.NewFolder
 
                 if (choice == "1")
                 {
-                    Console.Write("Geef een naam voor de nieuwe afspeellijst: ");
+                    Console.Write("Geef een Name voor de nieuwe afspeellijst: ");
                     string? name = Console.ReadLine();
                     if (!string.IsNullOrEmpty(name))
                         client.ActiveUser.CreatePlaylist(name);
                     else
-                        Console.WriteLine("Ongeldige naam voor afspeellijst.");
+                        Console.WriteLine("Ongeldige Name voor afspeellijst.");
                 }
                 else if (choice == "2")
                 {
@@ -167,7 +167,7 @@ namespace OOP4Spotivy.NewFolder
                     {
                         var song = client.AllSongs[i];
                         string artists = song.Artists != null && song.Artists.Count > 0
-                            ? string.Join(", ", song.Artists.Select(a => a.Naam))
+                            ? string.Join(", ", song.Artists.Select(a => a.Name))
                             : "Onbekend";
                         Console.WriteLine($"{i + 1}. {song.Title} - Artiest(en): {artists}");
                     }
@@ -209,7 +209,7 @@ namespace OOP4Spotivy.NewFolder
                         if (playables[i] is Song s)
                         {
                             string artists = s.Artists != null && s.Artists.Count > 0
-                                ? string.Join(", ", s.Artists.Select(a => a.Naam))
+                                ? string.Join(", ", s.Artists.Select(a => a.Name))
                                 : "Onbekend";
                             Console.WriteLine($"{i + 1}. {s.Title} - Artiest(en): {artists}");
                         }
@@ -256,7 +256,7 @@ namespace OOP4Spotivy.NewFolder
                         if (playables[i] is Song s)
                         {
                             string artists = s.Artists != null && s.Artists.Count > 0
-                                ? string.Join(", ", s.Artists.Select(a => a.Naam))
+                                ? string.Join(", ", s.Artists.Select(a => a.Name))
                                 : "Onbekend";
                             Console.WriteLine($"{i + 1}. {s.Title} - Artiest(en): {artists}");
                         }
@@ -301,7 +301,7 @@ namespace OOP4Spotivy.NewFolder
                     {
                         var album = client.AllAlbums[i];
                         string artists = album.Artists != null && album.Artists.Count > 0
-                            ? string.Join(", ", album.Artists.Select(a => a.Naam))
+                            ? string.Join(", ", album.Artists.Select(a => a.Name))
                             : "Onbekend";
                         Console.WriteLine($"{i + 1}. {album.Title} - Artiest(en): {artists}");
                     }
@@ -328,7 +328,7 @@ namespace OOP4Spotivy.NewFolder
                     {
                         var song = client.AllSongs[i];
                         string artists = song.Artists != null && song.Artists.Count > 0
-                            ? string.Join(", ", song.Artists.Select(a => a.Naam))
+                            ? string.Join(", ", song.Artists.Select(a => a.Name))
                             : "Onbekend";
                         Console.WriteLine($"{i + 1}. {song.Title} - Artiest(en): {artists}");
                     }
@@ -346,7 +346,7 @@ namespace OOP4Spotivy.NewFolder
                     if (client.CurrentlyPlaying is Song current)
                     {
                         string artists = current.Artists != null && current.Artists.Count > 0
-                            ? string.Join(", ", current.Artists.ConvertAll(a => a.Naam))
+                            ? string.Join(", ", current.Artists.ConvertAll(a => a.Name))
                             : "Onbekend";
                         Console.WriteLine($"Speelt nu af: '{current.Title}' - Artiest(en): {artists} - Genre: {current.SongGenre} - Nog {current.Length} seconden");
                     }
@@ -372,7 +372,7 @@ namespace OOP4Spotivy.NewFolder
                     Console.WriteLine("\nKies een gebruiker om mee in te loggen:");
                     for (int i = 0; i < users.Count; i++)
                     {
-                        Console.WriteLine($"{i + 1}. {users[i].Naam}");
+                        Console.WriteLine($"{i + 1}. {users[i].Name}");
                     }
 
                     if (!int.TryParse(Console.ReadLine(), out int userIndex) || userIndex < 1 || userIndex > users.Count)
@@ -385,7 +385,7 @@ namespace OOP4Spotivy.NewFolder
                     if (selectedUser != null)
                     {
                         client.ActiveUser = selectedUser;
-                        Console.WriteLine($"Ingelogd als: {client.ActiveUser.Naam}");
+                        Console.WriteLine($"Ingelogd als: {client.ActiveUser.Name}");
                     }
                     else
                     {
@@ -456,7 +456,7 @@ namespace OOP4Spotivy.NewFolder
                     for (int i = 0; i < playList.Count; i++)
                     {
                         if (playList[i] is Song s)
-                            Console.WriteLine($"{i + 1}. {s.Title} - {string.Join(", ", s.Artists.Select(a => a.Naam))}");
+                            Console.WriteLine($"{i + 1}. {s.Title} - {string.Join(", ", s.Artists.Select(a => a.Name))}");
                         else
                             Console.WriteLine($"{i + 1}. {playList[i]}");
                     }
@@ -477,12 +477,12 @@ namespace OOP4Spotivy.NewFolder
 
                         if (current is Song s)
                         {
-                            string artists = string.Join(", ", s.Artists.Select(a => a.Naam));
+                            string artists = string.Join(", ", s.Artists.Select(a => a.Name));
                             Console.WriteLine($"NU SPEELT: '{s.Title}' - Artiest(en): {artists} - Genre: {s.SongGenre} - Duur: {s.Length} sec");
 
                             if (currentIndex < playList.Count - 1 && playList[currentIndex + 1] is Song nextSong)
                             {
-                                string nextArtists = string.Join(", ", nextSong.Artists.Select(a => a.Naam));
+                                string nextArtists = string.Join(", ", nextSong.Artists.Select(a => a.Name));
                                 Console.WriteLine($"VOLGENDE: '{nextSong.Title}' - {nextArtists}");
                             }
                         }
@@ -568,7 +568,7 @@ namespace OOP4Spotivy.NewFolder
                     {
                         var album = client.AllAlbums[i];
                         string artists = album.Artists != null && album.Artists.Count > 0
-                            ? string.Join(", ", album.Artists.Select(a => a.Naam))
+                            ? string.Join(", ", album.Artists.Select(a => a.Name))
                             : "Onbekend";
                         Console.WriteLine($"{i + 1}. {album.Title} - Artiest(en): {artists}");
                     }
@@ -617,7 +617,7 @@ namespace OOP4Spotivy.NewFolder
                     for (int i = 0; i < playList.Count; i++)
                     {
                         if (playList[i] is Song s)
-                            Console.WriteLine($"{i + 1}. {s.Title} - {string.Join(", ", s.Artists.Select(a => a.Naam))}");
+                            Console.WriteLine($"{i + 1}. {s.Title} - {string.Join(", ", s.Artists.Select(a => a.Name))}");
                         else
                             Console.WriteLine($"{i + 1}. {playList[i]}");
                     }
@@ -636,12 +636,12 @@ namespace OOP4Spotivy.NewFolder
 
                         if (current is Song s)
                         {
-                            string artists = string.Join(", ", s.Artists.Select(a => a.Naam));
+                            string artists = string.Join(", ", s.Artists.Select(a => a.Name));
                             Console.WriteLine($"NU SPEELT: '{s.Title}' - Artiest(en): {artists} - Genre: {s.SongGenre} - Duur: {s.Length} sec");
 
                             if (currentIndex < playList.Count - 1 && playList[currentIndex + 1] is Song nextSong)
                             {
-                                string nextArtists = string.Join(", ", nextSong.Artists.Select(a => a.Naam));
+                                string nextArtists = string.Join(", ", nextSong.Artists.Select(a => a.Name));
                                 Console.WriteLine($"VOLGENDE: '{nextSong.Title}' - {nextArtists}");
                             }
                         }
@@ -742,7 +742,7 @@ namespace OOP4Spotivy.NewFolder
                         Console.WriteLine("\nJouw vrienden:");
                         for (int i = 0; i < friends.Count; i++)
                         {
-                            Console.WriteLine($"{i + 1}. {friends[i].Naam}");
+                            Console.WriteLine($"{i + 1}. {friends[i].Name}");
                         }
                     }
 
@@ -750,7 +750,7 @@ namespace OOP4Spotivy.NewFolder
                     else if (friendChoice == "2")
                     {
                         // Toon alle gebruikers behalve jezelf
-                        var potentialFriends = users.Where(g => g.Naam != client.ActiveUser.Naam).ToList();
+                        var potentialFriends = users.Where(g => g.Name != client.ActiveUser.Name).ToList();
 
                         if (potentialFriends.Count == 0)
                         {
@@ -761,17 +761,17 @@ namespace OOP4Spotivy.NewFolder
                         Console.WriteLine("\nKies een gebruiker om een vriendschapsverzoek naar te sturen:");
                         for (int i = 0; i < potentialFriends.Count; i++)
                         {
-                            var isAlreadyFriend = client.ActiveUser.Friends.Any(f => f.Naam == potentialFriends[i].Naam);
+                            var isAlreadyFriend = client.ActiveUser.Friends.Any(f => f.Name == potentialFriends[i].Name);
                             var status = isAlreadyFriend ? " (Al vriend)" : "";
 
                             // Controleer of er al een verzoek is gestuurd naar deze gebruiker
-                            var hasPendingRequest = friendRequests[potentialFriends[i].Naam].Any(p => p.Naam == client.ActiveUser.Naam);
+                            var hasPendingRequest = friendRequests[potentialFriends[i].Name].Any(p => p.Name == client.ActiveUser.Name);
                             if (hasPendingRequest)
                             {
                                 status = " (Verzoek verstuurd)";
                             }
 
-                            Console.WriteLine($"{i + 1}. {potentialFriends[i].Naam}{status}");
+                            Console.WriteLine($"{i + 1}. {potentialFriends[i].Name}{status}");
                         }
 
                         if (!int.TryParse(Console.ReadLine(), out int friendIndex) || friendIndex < 1 || friendIndex > potentialFriends.Count)
@@ -783,28 +783,28 @@ namespace OOP4Spotivy.NewFolder
                         var selectedFriend = potentialFriends[friendIndex - 1];
 
                         // Controleer of deze persoon al een vriend is
-                        if (client.ActiveUser.Friends.Any(f => f.Naam == selectedFriend.Naam))
+                        if (client.ActiveUser.Friends.Any(f => f.Name == selectedFriend.Name))
                         {
-                            Console.WriteLine($"{selectedFriend.Naam} is al jouw vriend.");
+                            Console.WriteLine($"{selectedFriend.Name} is al jouw vriend.");
                             continue;
                         }
 
                         // Controleer of er al een verzoek is gestuurd naar deze gebruiker
-                        if (friendRequests[selectedFriend.Naam].Any(p => p.Naam == client.ActiveUser.Naam))
+                        if (friendRequests[selectedFriend.Name].Any(p => p.Name == client.ActiveUser.Name))
                         {
-                            Console.WriteLine($"Je hebt al een vriendschapsverzoek gestuurd naar {selectedFriend.Naam}.");
+                            Console.WriteLine($"Je hebt al een vriendschapsverzoek gestuurd naar {selectedFriend.Name}.");
                             continue;
                         }
 
                         // Voeg een vriendschapsverzoek toe
-                        friendRequests[selectedFriend.Naam].Add(client.ActiveUser);
-                        Console.WriteLine($"Vriendschapsverzoek verstuurd naar {selectedFriend.Naam}.");
+                        friendRequests[selectedFriend.Name].Add(client.ActiveUser);
+                        Console.WriteLine($"Vriendschapsverzoek verstuurd naar {selectedFriend.Name}.");
                     }
 
                     // 3. Vriendschapsverzoeken bekijken
                     else if (friendChoice == "3")
                     {
-                        var currentRequests = friendRequests[client.ActiveUser.Naam];
+                        var currentRequests = friendRequests[client.ActiveUser.Name];
 
                         if (currentRequests.Count == 0)
                         {
@@ -815,14 +815,14 @@ namespace OOP4Spotivy.NewFolder
                         Console.WriteLine("\nOpenstaande vriendschapsverzoeken:");
                         for (int i = 0; i < currentRequests.Count; i++)
                         {
-                            Console.WriteLine($"{i + 1}. {currentRequests[i].Naam}");
+                            Console.WriteLine($"{i + 1}. {currentRequests[i].Name}");
                         }
                     }
 
                     // 4. Vriendschapsverzoek accepteren
                     else if (friendChoice == "4")
                     {
-                        var currentRequests = friendRequests[client.ActiveUser.Naam];
+                        var currentRequests = friendRequests[client.ActiveUser.Name];
 
                         if (currentRequests.Count == 0)
                         {
@@ -833,7 +833,7 @@ namespace OOP4Spotivy.NewFolder
                         Console.WriteLine("\nKies een vriendschapsverzoek om te accepteren:");
                         for (int i = 0; i < currentRequests.Count; i++)
                         {
-                            Console.WriteLine($"{i + 1}. {currentRequests[i].Naam}");
+                            Console.WriteLine($"{i + 1}. {currentRequests[i].Name}");
                         }
 
                         if (!int.TryParse(Console.ReadLine(), out int requestIndex) || requestIndex < 1 || requestIndex > currentRequests.Count)
@@ -851,13 +851,13 @@ namespace OOP4Spotivy.NewFolder
                         // Verwijder het verzoek
                         currentRequests.RemoveAt(requestIndex - 1);
 
-                        Console.WriteLine($"Je bent nu vrienden met {selectedRequest.Naam}!");
+                        Console.WriteLine($"Je bent nu vrienden met {selectedRequest.Name}!");
                     }
 
                     // 5. Vriendschapsverzoek weigeren
                     else if (friendChoice == "5")
                     {
-                        var currentRequests = friendRequests[client.ActiveUser.Naam];
+                        var currentRequests = friendRequests[client.ActiveUser.Name];
 
                         if (currentRequests.Count == 0)
                         {
@@ -868,7 +868,7 @@ namespace OOP4Spotivy.NewFolder
                         Console.WriteLine("\nKies een vriendschapsverzoek om te weigeren:");
                         for (int i = 0; i < currentRequests.Count; i++)
                         {
-                            Console.WriteLine($"{i + 1}. {currentRequests[i].Naam}");
+                            Console.WriteLine($"{i + 1}. {currentRequests[i].Name}");
                         }
 
                         if (!int.TryParse(Console.ReadLine(), out int requestIndex) || requestIndex < 1 || requestIndex > currentRequests.Count)
@@ -882,7 +882,7 @@ namespace OOP4Spotivy.NewFolder
                         // Verwijder het verzoek
                         currentRequests.RemoveAt(requestIndex - 1);
 
-                        Console.WriteLine($"Je hebt het vriendschapsverzoek van {selectedRequest.Naam} geweigerd.");
+                        Console.WriteLine($"Je hebt het vriendschapsverzoek van {selectedRequest.Name} geweigerd.");
                     }
 
                     // 6. Verwijder een vriend
@@ -899,7 +899,7 @@ namespace OOP4Spotivy.NewFolder
                         Console.WriteLine("\nKies een vriend om te verwijderen:");
                         for (int i = 0; i < friends.Count; i++)
                         {
-                            Console.WriteLine($"{i + 1}. {friends[i].Naam}");
+                            Console.WriteLine($"{i + 1}. {friends[i].Name}");
                         }
 
                         if (!int.TryParse(Console.ReadLine(), out int friendIndex) || friendIndex < 1 || friendIndex > friends.Count)
@@ -914,7 +914,7 @@ namespace OOP4Spotivy.NewFolder
                         client.ActiveUser.Friends.Remove(selectedFriend);
                         selectedFriend.Friends.Remove(client.ActiveUser);
 
-                        Console.WriteLine($"Je bent niet meer bevriend met {selectedFriend.Naam}.");
+                        Console.WriteLine($"Je bent niet meer bevriend met {selectedFriend.Name}.");
                     }
                     // 7. Bekijk speellijsten van een vriend
                     else if (friendChoice == "7")
@@ -929,7 +929,7 @@ namespace OOP4Spotivy.NewFolder
                         Console.WriteLine("\nKies een vriend om diens speellijsten te bekijken:");
                         for (int i = 0; i < friends.Count; i++)
                         {
-                            Console.WriteLine($"{i + 1}. {friends[i].Naam}");
+                            Console.WriteLine($"{i + 1}. {friends[i].Name}");
                         }
 
                         if (!int.TryParse(Console.ReadLine(), out int friendIndex) || friendIndex < 1 || friendIndex > friends.Count)
@@ -943,11 +943,11 @@ namespace OOP4Spotivy.NewFolder
 
                         if (playlists.Count == 0)
                         {
-                            Console.WriteLine($"{selectedFriend.Naam} heeft geen speellijsten.");
+                            Console.WriteLine($"{selectedFriend.Name} heeft geen speellijsten.");
                             continue;
                         }
 
-                        Console.WriteLine($"\nSpeellijsten van {selectedFriend.Naam}:");
+                        Console.WriteLine($"\nSpeellijsten van {selectedFriend.Name}:");
                         for (int i = 0; i < playlists.Count; i++)
                         {
                             Console.WriteLine($"{i + 1}. {playlists[i].Title}");
@@ -975,7 +975,7 @@ namespace OOP4Spotivy.NewFolder
                             if (playables[i] is Song s)
                             {
                                 string artists = s.Artists != null && s.Artists.Count > 0
-                                    ? string.Join(", ", s.Artists.Select(a => a.Naam))
+                                    ? string.Join(", ", s.Artists.Select(a => a.Name))
                                     : "Onbekend";
                                 Console.WriteLine($"{i + 1}. {s.Title} - Artiest(en): {artists}");
                             }
@@ -998,7 +998,7 @@ namespace OOP4Spotivy.NewFolder
                         Console.WriteLine("\nKies een vriend om mee te vergelijken:");
                         for (int i = 0; i < friends.Count; i++)
                         {
-                            Console.WriteLine($"{i + 1}. {friends[i].Naam}");
+                            Console.WriteLine($"{i + 1}. {friends[i].Name}");
                         }
 
                         if (!int.TryParse(Console.ReadLine(), out int friendIndex) || friendIndex < 1 || friendIndex > friends.Count)
@@ -1011,11 +1011,11 @@ namespace OOP4Spotivy.NewFolder
                         var friendPlaylists = selectedFriend.Playlists;
                         if (friendPlaylists.Count == 0)
                         {
-                            Console.WriteLine($"{selectedFriend.Naam} heeft geen speellijsten.");
+                            Console.WriteLine($"{selectedFriend.Name} heeft geen speellijsten.");
                             continue;
                         }
 
-                        Console.WriteLine($"\nSpeellijsten van {selectedFriend.Naam}:");
+                        Console.WriteLine($"\nSpeellijsten van {selectedFriend.Name}:");
                         for (int i = 0; i < friendPlaylists.Count; i++)
                         {
                             Console.WriteLine($"{i + 1}. {friendPlaylists[i].Title}");
@@ -1065,7 +1065,7 @@ namespace OOP4Spotivy.NewFolder
                             friendSongs.Any(vs =>
                                 string.Equals(ms.Title, vs.Title, StringComparison.OrdinalIgnoreCase) &&
                                 ms.Artists.Count == vs.Artists.Count &&
-                                ms.Artists.All(a => vs.Artists.Any(va => va.Naam == a.Naam))
+                                ms.Artists.All(a => vs.Artists.Any(va => va.Name == a.Name))
                             )).ToList();
 
                         Console.WriteLine($"\nAantal overeenkomende nummers: {matching.Count}");
@@ -1074,7 +1074,7 @@ namespace OOP4Spotivy.NewFolder
                             Console.WriteLine("Overeenkomende nummers:");
                             foreach (var song in matching)
                             {
-                                string artists = string.Join(", ", song.Artists.Select(a => a.Naam));
+                                string artists = string.Join(", ", song.Artists.Select(a => a.Name));
                                 Console.WriteLine($"- {song.Title} - {artists}");
                             }
                         }

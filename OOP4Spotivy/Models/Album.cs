@@ -61,5 +61,5 @@ public class Album : SongCollection, iPlayable
     public void Stop() { /* eventueel implementeren */ }
     public int Length => playables.Sum(p => p.Length);
 
-    public override string ToString() => $"{Title} (Artists: {string.Join(", ", Artists.Select(a => a.Naam))}, {playables.Count} items)";
+    public override string ToString() => $"{Title} (Artists: {string.Join(", ", Artists.Select(a => a.Name))}, {playables.Count} items)";
 }

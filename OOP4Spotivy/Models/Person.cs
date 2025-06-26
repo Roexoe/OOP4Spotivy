@@ -2,13 +2,13 @@ using System.Collections.Generic;
 
 public class Person
 {
-    public string Naam { get; set; }
+    public string Name { get; set; }
     public List<Person> Friends { get; set; }
     public List<Playlist> Playlists { get; set; }
 
-    public Person(string naam)
+    public Person(string name)
     {
-        Naam = naam;
+        Name = name;
         Friends = new List<Person>();
         Playlists = new List<Playlist>();
     }
@@ -51,7 +51,6 @@ public class Person
 
     public override string ToString()
     {
-        return Naam;
+        return Name;
     }
 }
-

@@ -51,7 +51,7 @@ public class Song : iPlayable
         _isPlaying = true;
 
         string artiesten = Artists != null && Artists.Count > 0
-            ? string.Join(", ", Artists.ConvertAll(a => a.Naam))
+            ? string.Join(", ", Artists.ConvertAll(a => a.Name))
             : "Onbekend";
         Console.WriteLine($"Start met afspelen: '{Title}' - Artiest(en): {artiesten} - Genre: {SongGenre}");
 
